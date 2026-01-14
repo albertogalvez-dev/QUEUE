@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Consulta de Turno Móvil - Llamado</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f7a3d",
+                        "primary-dark": "#16592d",
+                        "secondary": "#1BB7B7", 
+                        "background-light": "#f9fafa",
+                        "background-dark": "#1a1d23",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#252932",
+                        "triage-yellow": "#F2C94C",
+                        "triage-bg": "#FEFCE8",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem", 
+                        "lg": "0.5rem", 
+                        "xl": "0.75rem", 
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    animation: {
+                        'soft-pulse': 'soft-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        'soft-pulse': {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.85', transform: 'scale(1.02)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 15px;
+            top: 24px;
+            bottom: -24px;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+        .timeline-item:last-child .timeline-line {
+            display: none;
+        }
+        /* Custom scrollbar for clean look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-[#121714] dark:text-gray-100 flex flex-col items-center">
+<!-- Mobile-constrained Container -->
+<div class="w-full max-w-[500px] flex flex-col min-h-screen bg-background-light dark:bg-background-dark shadow-2xl relative">
+<!-- Header -->
+<header class="flex items-center justify-between px-6 py-5 bg-white dark:bg-surface-dark border-b border-gray-100 dark:border-gray-800 sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">local_hospital</span>
+</div>
+<div>
+<h1 class="text-primary font-bold text-lg leading-tight tracking-tight">Portal del Paciente</h1>
+<p class="text-xs text-gray-400 font-medium tracking-wide uppercase">Servicio Andaluz de Salud</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="size-9 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="size-9 rounded-full bg-cover bg-center border border-gray-200 dark:border-gray-700" data-alt="User profile avatar placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUHkLLVMwN8flWSmmCn-LwJswIp4G9DRl15nJCaCW9xDk8S2OL3vlMcUrp-TzxMxM3Gm2eS9hDUF0nplLmrgI2peFLZUooQ_aIkdG2DJXFxg0vsRqYAKBRRXNzNmf5d7Y1VaJAjl5xOI9JUXg8VY0AOw74-Rg8tp7TxCNtQfFLPmo8LYjtI6E9ueZlLDw5I3nC0V7JrYwnbzFY8lI8TxdFPuxBz5vxwGrpJD9ZSfdlJmwAuhG90GtWPw66rmWaVVMlpzAs31o4rfw')"></div>
+</div>
+</header>
+<!-- Main Content Scrollable Area -->
+<main class="flex-1 px-4 py-6 flex flex-col gap-5 overflow-y-auto pb-24">
+<!-- Hero Status Card (Called State) -->
+<div class="bg-white dark:bg-surface-dark rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border-[3px] border-primary relative overflow-hidden group">
+<!-- Background decorative pattern -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+<div class="absolute bottom-0 left-0 w-24 h-24 bg-secondary/10 rounded-full -ml-8 -mb-8 blur-xl"></div>
+<div class="p-6 flex flex-col items-center text-center relative z-10">
+<div class="animate-soft-pulse bg-secondary/10 text-secondary border border-secondary/20 px-4 py-1.5 rounded-full flex items-center gap-2 mb-4 shadow-sm">
+<span class="material-symbols-outlined text-[18px] animate-pulse">campaign</span>
+<span class="text-sm font-extrabold tracking-wider">LLAMADO</span>
+</div>
+<div class="flex flex-col gap-1 mb-6">
+<span class="text-gray-400 dark:text-gray-500 text-sm font-medium uppercase tracking-widest">Su Turno</span>
+<h2 class="text-7xl font-display font-black text-gray-900 dark:text-white tracking-tighter tabular-nums">A-023</h2>
+</div>
+<div class="bg-primary text-white w-full py-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-[28px]">door_front</span>
+<div class="text-left">
+<p class="text-xs text-white/80 font-medium uppercase tracking-wide">Diríjase a</p>
+<p class="text-xl font-bold leading-none">Consulta 3</p>
+</div>
+</div>
+</div>
+<!-- Bottom progress bar visual -->
+<div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 mt-2">
+<div class="h-full bg-secondary w-full animate-pulse"></div>
+</div>
+</div>
+<!-- Triage Info Card -->
+<div class="bg-triage-bg dark:bg-yellow-900/10 border-l-4 border-triage-yellow rounded-xl p-5 shadow-sm flex items-start justify-between gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-yellow-700 dark:text-yellow-400">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+<span class="text-xs font-bold uppercase tracking-wider">Triaje</span>
+</div>
+<p class="text-lg font-bold text-gray-900 dark:text-white leading-tight">AMARILLO - Urgente</p>
+<p class="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">Tiempo máx. atención: 60 min</p>
+</div>
+<!-- Visual Icon -->
+<div class="size-12 rounded-full bg-white dark:bg-yellow-900/30 flex items-center justify-center text-triage-yellow shadow-sm border border-yellow-100 dark:border-yellow-800">
+<span class="material-symbols-outlined text-[24px]">medical_services</span>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-surface-dark p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-2 text-center group hover:border-primary/30 transition-colors">
+<span class="text-gray-400 dark:text-gray-500 text-xs font-bold uppercase tracking-wider">Personas delante</span>
+<p class="text-4xl font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">0</p>
+<div class="h-1 w-8 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="bg-white dark:bg-surface-dark p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center justify-center gap-2 text-center group hover:border-secondary/30 transition-colors">
+<span class="text-gray-400 dark:text-gray-500 text-xs font-bold uppercase tracking-wider">Espera estimada</span>
+<div class="flex items-baseline gap-1">
+<p class="text-4xl font-bold text-gray-900 dark:text-white group-hover:text-secondary transition-colors">0</p>
+<span class="text-sm font-medium text-gray-500">min</span>
+</div>
+<div class="h-1 w-8 bg-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<!-- Timeline -->
+<div class="bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+<h3 class="text-base font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">timeline</span>
+                    Progreso del Turno
+                </h3>
+<div class="flex flex-col relative pl-2">
+<!-- Step 1: Completed -->
+<div class="timeline-item flex gap-4 pb-8 relative">
+<div class="timeline-line"></div>
+<div class="z-10 size-8 rounded-full bg-primary text-white flex items-center justify-center shrink-0 ring-4 ring-white dark:ring-surface-dark">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-bold text-gray-900 dark:text-white">Llegada</p>
+<p class="text-xs text-gray-500">10:45 AM • Recepción</p>
+</div>
+</div>
+<!-- Step 2: Completed -->
+<div class="timeline-item flex gap-4 pb-8 relative">
+<div class="timeline-line"></div>
+<div class="z-10 size-8 rounded-full bg-primary text-white flex items-center justify-center shrink-0 ring-4 ring-white dark:ring-surface-dark">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-bold text-gray-900 dark:text-white">Triaje</p>
+<p class="text-xs text-gray-500">10:55 AM • Enfermería</p>
+</div>
+</div>
+<!-- Step 3: Completed -->
+<div class="timeline-item flex gap-4 pb-8 relative">
+<div class="timeline-line"></div>
+<div class="z-10 size-8 rounded-full bg-primary text-white flex items-center justify-center shrink-0 ring-4 ring-white dark:ring-surface-dark">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-bold text-gray-900 dark:text-white">Sala de Espera</p>
+<p class="text-xs text-gray-500">Zona B</p>
+</div>
+</div>
+<!-- Step 4: Active -->
+<div class="timeline-item flex gap-4 relative">
+<div class="timeline-line"></div> <!-- Hidden by CSS last-child -->
+<div class="z-10 size-8 rounded-full bg-secondary text-white flex items-center justify-center shrink-0 shadow-[0_0_0_4px_rgba(27,183,183,0.2)] ring-4 ring-white dark:ring-surface-dark animate-pulse">
+<span class="material-symbols-outlined text-[16px]">campaign</span>
+</div>
+<div class="flex flex-col pt-1">
+<p class="text-sm font-bold text-secondary">LLAMADO</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">Acuda a consulta inmediatamente</p>
+</div>
+</div>
+</div>
+</div>
+<div class="h-8"></div> <!-- Spacer -->
+</main>
+<!-- Sticky Footer -->
+<footer class="sticky bottom-0 bg-white/80 dark:bg-surface-dark/90 backdrop-blur-md border-t border-gray-100 dark:border-gray-800 p-4 pb-6 z-40">
+<div class="flex flex-col gap-3">
+<button class="w-full h-14 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold text-lg shadow-lg shadow-primary/25 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">refresh</span>
+                    Actualizar Estado
+                </button>
+<a class="text-center text-xs text-gray-400 hover:text-primary transition-colors flex items-center justify-center gap-1" href="#">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+                    Política de Privacidad y Tratamiento de Datos
+                </a>
+</div>
+</footer>
+</div>
+</body></html>

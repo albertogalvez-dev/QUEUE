@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kiosco Confirmación y Servicios - ClinicQueue</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007c8a",
+                        "primary-dark": "#005c66",
+                        "background-light": "#f4f7f7",
+                        "background-dark": "#1a1f24",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2c333a",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "2xl": "1.5rem", "full": "9999px" },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 12px rgba(0,0,0,0.04)'
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        .service-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col overflow-hidden selection:bg-primary/20 selection:text-primary">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark px-8 py-4 z-10 shadow-sm relative">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-[32px]">local_hospital</span>
+</div>
+<div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">ClinicQueue</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase">Servicio Andaluz de Salud</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end hidden md:flex">
+<span class="text-sm font-bold text-slate-800 dark:text-slate-100">Centro de Salud Alameda</span>
+<span class="text-xs text-slate-500 dark:text-slate-400" id="current-time">10:24 AM • 12 Oct 2023</span>
+</div>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-12 ring-2 ring-primary/20" data-alt="User profile avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCg0sWQVmNGzEUtSAmOaa1ZmkgwQ-kyOVSPTVhlooykFAD_0sm3WMh_pS2rEJAS5A4yXn3IksJ6suwpaWWmMImu8Tvw5VGtvrJGENCbaL_1cweFeGqtgs65MLFvMQ2R8FdygNFj_KozM7MbOM-zyMRDBsO21isGpLGfWbq-WAkZOjC7muijacsu_1sV11RGWlI-qeYHalAPpyY2RdjTj_z4SZHqV30EYybmZCbxWUyvtD-ScVZB42_C2J-5AwCf9NPC5u4iBu_RyCM");'>
+</div>
+</div>
+</header>
+<!-- Main Content Grid -->
+<main class="flex-1 grid lg:grid-cols-12 gap-0 h-[calc(100vh-80px)]">
+<!-- Left Panel: Detected Appointment -->
+<section class="lg:col-span-5 bg-white dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 p-8 lg:p-12 flex flex-col justify-center relative overflow-hidden group">
+<!-- Decorative background blobs -->
+<div class="absolute top-[-10%] left-[-10%] w-[300px] h-[300px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[300px] h-[300px] bg-teal-200/20 dark:bg-teal-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="max-w-md mx-auto w-full relative z-10 flex flex-col h-full justify-center">
+<div class="mb-8">
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold tracking-wide uppercase mb-4">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+</span>
+                        Cita Detectada
+                    </span>
+<h1 class="text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight">Hola, María</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg">Hemos encontrado una cita programada para ahora.</p>
+</div>
+<!-- Appointment Ticket Card -->
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-0 overflow-hidden mb-8 relative">
+<!-- Top accent bar -->
+<div class="h-2 w-full bg-primary"></div>
+<div class="p-6 lg:p-8 flex flex-col gap-6">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider mb-1">Hora Estimada</p>
+<div class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">10:30</div>
+</div>
+<div class="size-14 rounded-full bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">calendar_today</span>
+</div>
+</div>
+<div class="h-px w-full bg-slate-100 dark:bg-slate-700"></div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase mb-1">Especialidad</p>
+<p class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">pediatrics</span>
+                                    Pediatría
+                                </p>
+</div>
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase mb-1">Ubicación</p>
+<p class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">door_front</span>
+                                    Sala 04
+                                </p>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 flex items-center gap-4">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-white dark:border-slate-700 shadow-sm" data-alt="Doctor portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuArcCs77UxxqjTtLXbbxUrD4FBNAQx1xhThfH-gr5CW06WyqEfcleCQbLla7vHBRNjAyHdnsHvIXHLIAvIPCf0RnENZuTBO8gpBaTQL7iwtaffCNARIyU6t6msBSFuKKZPR7tpkoX9QU7GhFtyN5fnpfInp2_rQjyJYTHV5x3hey6FWfdFz08ze0uCRKcDeVvtzEeVnNneBRa0k0-5dWrwhZZWRp22ouhqlfNPZPKtjlPvgecUUmH19z4MUSxZjz7cMqLFNILFVSUE");'>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Dr. Juan Pérez</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Médico Especialista</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary-dark text-white text-xl font-bold py-5 px-8 rounded-xl shadow-lg shadow-teal-900/10 transition-all active:scale-[0.99] flex items-center justify-center gap-3 group/btn">
+<span class="material-symbols-outlined text-3xl transition-transform group-hover/btn:translate-x-1">check_circle</span>
+                    Confirmar Llegada
+                </button>
+<p class="mt-4 text-center text-sm text-slate-400 dark:text-slate-500">
+                    Al confirmar, se notificará al personal médico de su presencia.
+                </p>
+</div>
+</section>
+<!-- Right Panel: Manual Selection -->
+<section class="lg:col-span-7 bg-background-light dark:bg-background-dark p-8 lg:p-12 flex flex-col relative">
+<div class="max-w-3xl mx-auto w-full h-full flex flex-col">
+<div class="mb-8 lg:mb-12">
+<h2 class="text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-3">¿No tiene cita previa?</h2>
+<p class="text-slate-600 dark:text-slate-400 text-lg">Seleccione el motivo de su visita para generar un turno de espera.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 grow content-start">
+<!-- Service Card: Admisión -->
+<button class="service-card group relative bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-card hover:shadow-lg transition-all border-2 border-transparent hover:border-primary text-left flex flex-col h-auto min-h-[160px]">
+<div class="mb-auto size-14 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-3xl">assignment_ind</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mt-4 mb-1 group-hover:text-primary transition-colors">Admisión</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Información, citas y trámites administrativos</p>
+</div>
+<div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+<span class="material-symbols-outlined">radio_button_checked</span>
+</div>
+</button>
+<!-- Service Card: Extracciones -->
+<button class="service-card group relative bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-card hover:shadow-lg transition-all border-2 border-transparent hover:border-primary text-left flex flex-col h-auto min-h-[160px]">
+<div class="mb-auto size-14 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-3xl">bloodtype</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mt-4 mb-1 group-hover:text-primary transition-colors">Extracciones</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Análisis de sangre y muestras de laboratorio</p>
+</div>
+<div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+<span class="material-symbols-outlined">radio_button_checked</span>
+</div>
+</button>
+<!-- Service Card: Vacunación -->
+<button class="service-card group relative bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-card hover:shadow-lg transition-all border-2 border-transparent hover:border-primary text-left flex flex-col h-auto min-h-[160px]">
+<div class="mb-auto size-14 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-3xl">vaccines</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mt-4 mb-1 group-hover:text-primary transition-colors">Vacunación</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Campañas estacionales y calendario infantil</p>
+</div>
+<div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+<span class="material-symbols-outlined">radio_button_checked</span>
+</div>
+</button>
+<!-- Service Card: Consulta -->
+<button class="service-card group relative bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-card hover:shadow-lg transition-all border-2 border-transparent hover:border-primary text-left flex flex-col h-auto min-h-[160px]">
+<div class="mb-auto size-14 rounded-full bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-3xl">medical_services</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mt-4 mb-1 group-hover:text-primary transition-colors">Consulta General</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Urgencias leves y medicina de familia</p>
+</div>
+<div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+<span class="material-symbols-outlined">radio_button_checked</span>
+</div>
+</button>
+</div>
+<div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700 flex justify-end items-center gap-6">
+<p class="text-slate-500 dark:text-slate-400 text-sm hidden md:block">Seleccione una opción para continuar</p>
+<button class="bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 text-lg font-bold py-4 px-10 rounded-xl shadow-lg transition-all active:scale-[0.99] flex items-center gap-2 opacity-50 cursor-not-allowed">
+<span>Generar Turno</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<script>
+        // Simple script to update time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+            const el = document.getElementById('current-time');
+            if(el) el.innerHTML = `${timeString} &bull; ${dateString}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body></html>

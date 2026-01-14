@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clasificación de Triaje - ClinicQueue</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b6451",
+                        "primary-dark": "#1e483a",
+                        "background-light": "#f6f7f7",
+                        "background-dark": "#151d1a",
+                        "triage-red": "#dc2626",
+                        "triage-orange": "#f97316",
+                        "triage-yellow": "#facc15",
+                        "triage-green": "#16a34a",
+                        "triage-blue": "#2563eb",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .triage-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .triage-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .triage-btn:active {
+            transform: translateY(0);
+        }
+        .triage-btn.selected {
+            ring-width: 4px;
+            ring-offset-width: 2px;
+            transform: scale(0.98);
+        }
+        /* Hide scrollbar for cleaner UI in queue */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#131615] font-display min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-[#dee3e1] bg-white px-6 py-3 shrink-0 z-20">
+<div class="flex items-center gap-4 text-[#131615]">
+<div class="size-8 flex items-center justify-center rounded bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+</div>
+<h2 class="text-[#131615] text-xl font-bold leading-tight tracking-[-0.015em]">ClinicQueue <span class="text-primary opacity-60 font-medium text-sm ml-1">| Triaje</span></h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-[#6c7f78] hover:text-primary text-sm font-bold leading-normal transition-colors" href="#">Recepción</a>
+<a class="text-primary text-sm font-bold leading-normal relative after:content-[''] after:absolute after:-bottom-5 after:left-0 after:w-full after:h-0.5 after:bg-primary" href="#">Triaje</a>
+<a class="text-[#6c7f78] hover:text-primary text-sm font-bold leading-normal transition-colors" href="#">Consultas</a>
+<a class="text-[#6c7f78] hover:text-primary text-sm font-bold leading-normal transition-colors" href="#">Informes</a>
+</nav>
+<div class="flex gap-3 items-center border-l border-[#f1f3f3] pl-6">
+<div class="flex flex-col items-end mr-2 hidden sm:flex">
+<span class="text-xs font-bold text-[#131615]">Dra. Vallejo</span>
+<span class="text-[10px] font-medium text-[#6c7f78] uppercase tracking-wide">Operador T-04</span>
+</div>
+<div class="size-9 rounded-full bg-[#f1f3f3] overflow-hidden border border-white shadow-sm relative">
+<img class="w-full h-full object-cover" data-alt="Profile picture of the operator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuConxN2pChDm8lcf5S2p2iEs1IyITIVcybAbofarLKqWiSfwylnPiTL_anT-qNirrIPQ5RQU0Bj7lKUqZQzOYsdYTYRbgIzqBJ71PQpBmC3vxtnMlHy6SZYcqlFhIKf-4G_JS1Eqcxar-MJSx5wy2ZrggUy0R8tjRE8rzkeJ6cZuiWsEi9ERO1L-mduRXDaHLMG6-1c0qSRLiHAxiRYLN_-qjkyKZrJq9J--zXmlhASaeuCufgO6jjb8OYF5aDsp3M8e3NcpczW-DA"/>
+<div class="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-white"></div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left: Active Triage Workspace -->
+<section class="flex-1 flex flex-col h-full overflow-y-auto bg-white relative">
+<!-- Patient Header -->
+<div class="p-6 border-b border-[#f1f3f3] bg-white sticky top-0 z-10 shadow-sm">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="text-3xl font-black text-[#131615] tracking-tight">Roberto Martínez</h1>
+<span class="bg-[#f1f3f3] text-[#131615] text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Masc - 45 Años</span>
+</div>
+<div class="flex items-center gap-2 text-[#6c7f78]">
+<span class="material-symbols-outlined text-lg">schedule</span>
+<span class="text-sm font-medium">Llegada: 09:42 (hace 15 min)</span>
+<span class="mx-2 text-[#dee3e1]">|</span>
+<span class="material-symbols-outlined text-lg">medical_information</span>
+<span class="text-sm font-medium">Motivo: Dolor torácico agudo irradiado a brazo izquierdo.</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 h-10 rounded-lg border border-[#dee3e1] text-[#131615] text-sm font-bold hover:bg-[#f1f3f3] transition-colors">
+<span class="material-symbols-outlined text-lg">history</span>
+                            Historial
+                        </button>
+</div>
+</div>
+</div>
+<!-- Triage Controls -->
+<div class="p-6 md:p-10 flex flex-col gap-8 max-w-5xl mx-auto w-full">
+<!-- Manchester Grid -->
+<div>
+<h3 class="text-[#131615] text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">gavel</span>
+                        Asignar Prioridad (Manchester)
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+<!-- Level 1 -->
+<button class="triage-btn group flex flex-col items-center justify-center gap-3 p-4 h-48 rounded-xl bg-red-50 border-2 border-red-100 hover:border-red-500 hover:bg-red-500 hover:text-white transition-all text-center relative overflow-hidden">
+<div class="absolute inset-0 bg-red-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+<span class="material-symbols-outlined text-4xl text-red-600 group-hover:text-white">1k</span>
+<div class="flex flex-col gap-1">
+<span class="text-2xl font-black text-red-900 group-hover:text-white">Nivel 1</span>
+<span class="text-sm font-bold text-red-800 uppercase tracking-wider group-hover:text-red-100">Resucitación</span>
+</div>
+<span class="mt-auto py-1 px-3 bg-white/80 group-hover:bg-white/20 backdrop-blur-sm rounded-full text-xs font-black text-red-700 group-hover:text-white">0 MIN</span>
+</button>
+<!-- Level 2 -->
+<button class="triage-btn group flex flex-col items-center justify-center gap-3 p-4 h-48 rounded-xl bg-orange-50 border-2 border-orange-100 hover:border-orange-500 hover:bg-orange-500 hover:text-white transition-all text-center">
+<span class="material-symbols-outlined text-4xl text-orange-600 group-hover:text-white">emergency</span>
+<div class="flex flex-col gap-1">
+<span class="text-2xl font-black text-orange-900 group-hover:text-white">Nivel 2</span>
+<span class="text-sm font-bold text-orange-800 uppercase tracking-wider group-hover:text-orange-100">Emergencia</span>
+</div>
+<span class="mt-auto py-1 px-3 bg-white/80 group-hover:bg-white/20 backdrop-blur-sm rounded-full text-xs font-black text-orange-700 group-hover:text-white">10 MIN</span>
+</button>
+<!-- Level 3 -->
+<button class="triage-btn group flex flex-col items-center justify-center gap-3 p-4 h-48 rounded-xl bg-yellow-50 border-2 border-yellow-100 hover:border-yellow-400 hover:bg-yellow-400 hover:text-black transition-all text-center">
+<span class="material-symbols-outlined text-4xl text-yellow-600 group-hover:text-black">notifications_active</span>
+<div class="flex flex-col gap-1">
+<span class="text-2xl font-black text-yellow-900 group-hover:text-black">Nivel 3</span>
+<span class="text-sm font-bold text-yellow-800 uppercase tracking-wider group-hover:text-black/70">Urgencia</span>
+</div>
+<span class="mt-auto py-1 px-3 bg-white/80 group-hover:bg-black/10 backdrop-blur-sm rounded-full text-xs font-black text-yellow-700 group-hover:text-black">60 MIN</span>
+</button>
+<!-- Level 4 -->
+<button class="triage-btn group flex flex-col items-center justify-center gap-3 p-4 h-48 rounded-xl bg-green-50 border-2 border-green-100 hover:border-green-500 hover:bg-green-600 hover:text-white transition-all text-center">
+<span class="material-symbols-outlined text-4xl text-green-600 group-hover:text-white">check_circle</span>
+<div class="flex flex-col gap-1">
+<span class="text-2xl font-black text-green-900 group-hover:text-white">Nivel 4</span>
+<span class="text-sm font-bold text-green-800 uppercase tracking-wider group-hover:text-green-100">Estándar</span>
+</div>
+<span class="mt-auto py-1 px-3 bg-white/80 group-hover:bg-white/20 backdrop-blur-sm rounded-full text-xs font-black text-green-700 group-hover:text-white">120 MIN</span>
+</button>
+<!-- Level 5 -->
+<button class="triage-btn group flex flex-col items-center justify-center gap-3 p-4 h-48 rounded-xl bg-blue-50 border-2 border-blue-100 hover:border-blue-500 hover:bg-blue-600 hover:text-white transition-all text-center">
+<span class="material-symbols-outlined text-4xl text-blue-600 group-hover:text-white">info</span>
+<div class="flex flex-col gap-1">
+<span class="text-2xl font-black text-blue-900 group-hover:text-white">Nivel 5</span>
+<span class="text-sm font-bold text-blue-800 uppercase tracking-wider group-hover:text-blue-100">No Urgente</span>
+</div>
+<span class="mt-auto py-1 px-3 bg-white/80 group-hover:bg-white/20 backdrop-blur-sm rounded-full text-xs font-black text-blue-700 group-hover:text-white">240 MIN</span>
+</button>
+</div>
+</div>
+<!-- Notes & Submit -->
+<div class="flex flex-col md:flex-row gap-6 mt-4">
+<div class="flex-1">
+<label class="block text-[#131615] text-sm font-bold mb-2" for="notes">Notas Clínicas / Observaciones</label>
+<textarea class="w-full rounded-lg border-[#dee3e1] bg-[#fcfdfd] text-[#131615] placeholder:text-[#6c7f78] focus:border-primary focus:ring-1 focus:ring-primary p-4 text-sm font-medium resize-none shadow-sm" id="notes" placeholder="Escriba aquí los signos vitales (TA, FC, SatO2) o cualquier observación relevante para el médico..." rows="4"></textarea>
+</div>
+<div class="md:w-64 flex flex-col justify-end">
+<button class="w-full flex items-center justify-center gap-2 h-14 bg-primary hover:bg-primary-dark text-white rounded-lg shadow-lg shadow-primary/20 transition-all font-bold text-base tracking-wide uppercase">
+<span class="material-symbols-outlined">save_as</span>
+                            Confirmar
+                        </button>
+<button class="w-full mt-3 text-[#6c7f78] hover:text-[#131615] text-xs font-bold py-2 underline decoration-dashed underline-offset-4">
+                            Pausar y revisar después
+                        </button>
+</div>
+</div>
+<!-- Quick Vitals Input (Optional but fits theme) -->
+<div class="mt-2 pt-6 border-t border-[#f1f3f3]">
+<h4 class="text-xs font-bold text-[#6c7f78] uppercase mb-3 tracking-wider">Signos Vitales Rápidos</h4>
+<div class="flex flex-wrap gap-4">
+<div class="flex items-center gap-2 bg-[#f6f7f7] px-3 py-2 rounded-lg border border-transparent focus-within:border-primary focus-within:bg-white">
+<span class="text-xs font-bold text-[#6c7f78]">TA:</span>
+<input class="bg-transparent border-none p-0 w-16 text-sm font-bold focus:ring-0" placeholder="120/80" type="text"/>
+</div>
+<div class="flex items-center gap-2 bg-[#f6f7f7] px-3 py-2 rounded-lg border border-transparent focus-within:border-primary focus-within:bg-white">
+<span class="text-xs font-bold text-[#6c7f78]">FC:</span>
+<input class="bg-transparent border-none p-0 w-12 text-sm font-bold focus:ring-0" placeholder="80" type="text"/>
+<span class="text-xs text-[#6c7f78]">bpm</span>
+</div>
+<div class="flex items-center gap-2 bg-[#f6f7f7] px-3 py-2 rounded-lg border border-transparent focus-within:border-primary focus-within:bg-white">
+<span class="text-xs font-bold text-[#6c7f78]">O2:</span>
+<input class="bg-transparent border-none p-0 w-12 text-sm font-bold focus:ring-0" placeholder="98" type="text"/>
+<span class="text-xs text-[#6c7f78]">%</span>
+</div>
+<div class="flex items-center gap-2 bg-[#f6f7f7] px-3 py-2 rounded-lg border border-transparent focus-within:border-primary focus-within:bg-white">
+<span class="text-xs font-bold text-[#6c7f78]">T°:</span>
+<input class="bg-transparent border-none p-0 w-12 text-sm font-bold focus:ring-0" placeholder="36.5" type="text"/>
+<span class="text-xs text-[#6c7f78]">C</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right: Queue Sidebar -->
+<aside class="w-96 bg-[#f6f7f7] border-l border-[#dee3e1] flex flex-col h-full hidden xl:flex">
+<div class="p-5 border-b border-[#e5e7eb] bg-[#f1f3f3]/50 flex justify-between items-center">
+<h3 class="text-[#131615] font-bold text-base flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">people</span>
+                    Sala de Espera
+                </h3>
+<span class="bg-[#131615] text-white text-xs font-bold px-2 py-0.5 rounded-full">12</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar">
+<!-- Queue Item 1 -->
+<div class="group cursor-pointer bg-white p-4 rounded-lg border border-[#e5e7eb] hover:border-primary hover:shadow-md transition-all relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/20 group-hover:bg-primary transition-colors"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<span class="font-bold text-[#131615] text-sm">Ana Torres</span>
+<span class="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">+15m</span>
+</div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex flex-col">
+<span class="text-xs text-[#6c7f78]">ID: #992-421</span>
+<span class="text-xs font-medium text-[#131615] mt-1">Fiebre alta pediátrica</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white p-1 rounded hover:bg-primary-dark">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Queue Item 2 -->
+<div class="group cursor-pointer bg-white p-4 rounded-lg border border-[#e5e7eb] hover:border-primary hover:shadow-md transition-all relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-transparent group-hover:bg-primary transition-colors"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<span class="font-bold text-[#131615] text-sm">Carlos Ruiz</span>
+<span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">+12m</span>
+</div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex flex-col">
+<span class="text-xs text-[#6c7f78]">ID: #832-110</span>
+<span class="text-xs font-medium text-[#131615] mt-1">Corte profundo mano</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white p-1 rounded hover:bg-primary-dark">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Queue Item 3 -->
+<div class="group cursor-pointer bg-white p-4 rounded-lg border border-[#e5e7eb] hover:border-primary hover:shadow-md transition-all relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-transparent group-hover:bg-primary transition-colors"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<span class="font-bold text-[#131615] text-sm">Lucía Méndez</span>
+<span class="text-[10px] font-bold text-[#6c7f78] bg-[#f1f3f3] px-1.5 py-0.5 rounded">5m</span>
+</div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex flex-col">
+<span class="text-xs text-[#6c7f78]">ID: #551-002</span>
+<span class="text-xs font-medium text-[#131615] mt-1">Malestar general</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white p-1 rounded hover:bg-primary-dark">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Queue Item 4 -->
+<div class="group cursor-pointer bg-white p-4 rounded-lg border border-[#e5e7eb] hover:border-primary hover:shadow-md transition-all relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-transparent group-hover:bg-primary transition-colors"></div>
+<div class="flex justify-between items-start mb-2 pl-2">
+<span class="font-bold text-[#131615] text-sm">Javier L.</span>
+<span class="text-[10px] font-bold text-[#6c7f78] bg-[#f1f3f3] px-1.5 py-0.5 rounded">2m</span>
+</div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex flex-col">
+<span class="text-xs text-[#6c7f78]">ID: #221-992</span>
+<span class="text-xs font-medium text-[#131615] mt-1">Dolor abdominal</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white p-1 rounded hover:bg-primary-dark">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Stats/Context Footer -->
+<div class="p-4 bg-[#e8eaea] border-t border-[#dee3e1]">
+<div class="flex justify-between text-xs font-bold text-[#6c7f78] mb-2">
+<span>Tiempo Promedio:</span>
+<span>4m 30s</span>
+</div>
+<div class="w-full bg-[#d1d5db] h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[70%]"></div>
+</div>
+<p class="text-[10px] text-[#6c7f78] mt-2 text-center">Objetivo de eficiencia: &lt; 5m</p>
+</div>
+</aside>
+</main>
+</body></html>

@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: queue-prod-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: queue
+      POSTGRES_USER: ${POSTGRES_USER:-queue}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-queue_prod_password}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-queue} -d queue" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: queue-prod-api
+    restart: unless-stopped
+    ports:
+      - "5150:8080" # Maps host 5150 to container 8080 (ASP.NET default)
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__QueueDb=Host=db;Port=5432;Database=queue;Username=${POSTGRES_USER:-queue};Password=${POSTGRES_PASSWORD:-queue_prod_password}
+      - QUEUE_AUTH_REQUIRED=${QUEUE_AUTH_REQUIRED:-false}
+      - QUEUE_JWT_SECRET=${QUEUE_JWT_SECRET:-change_me_in_production_please_very_long_secret}
+      - QUEUE_PATH_BASE=${QUEUE_PATH_BASE:-/projects/queue/api}
+      - QUEUE_CORS_ORIGINS=${QUEUE_CORS_ORIGINS:-http://localhost:5173}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_prod_data:

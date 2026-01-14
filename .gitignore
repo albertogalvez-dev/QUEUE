@@ -1,0 +1,33 @@
+# System Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Dependencies
+node_modules/
+dist/
+bin/
+obj/
+*.suo
+*.user
+*.pdb
+
+# Media Outputs
+@fotos/**
+apps/web/fotos/
+*.mp4
+*.webm
+*.avi
+*.mkv
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

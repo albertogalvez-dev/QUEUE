@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kiosco Identificación DNI/NIE - ClinicQueue</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007a33",
+                        "primary-dark": "#006228",
+                        "background-light": "#ffffff",
+                        "background-alt": "#f8faf9",
+                        "background-dark": "#22262a",
+                        "text-main": "#101814",
+                        "text-muted": "#5e8d71",
+                        "border-color": "#dae7df",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'key': '0 2px 0 0 #e5e7eb',
+                        'key-active': '0 0 0 0 #e5e7eb',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Blinking cursor animation */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+        
+        /* Hide scrollbar for kiosk mode feeling */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-main font-display antialiased selection:bg-primary/20 selection:text-primary min-h-screen flex flex-col">
+<!-- Top Navigation Bar (Simplified for Kiosk) -->
+<header class="w-full bg-white border-b border-border-color px-8 py-4 flex items-center justify-between shadow-sm z-10 sticky top-0">
+<div class="flex items-center gap-4">
+<!-- Institutional Logo Placeholder -->
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">local_hospital</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-text-main leading-tight">Servicio Andaluz de Salud</h1>
+<p class="text-xs font-medium text-text-muted uppercase tracking-wider">ClinicQueue Kiosk</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-background-alt px-3 py-1.5 rounded-full border border-border-color">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+</span>
+<span class="text-xs font-semibold text-primary">Conectado</span>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-background-alt transition-colors text-text-main">
+<span class="material-symbols-outlined">g_translate</span>
+</button>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-background-alt transition-colors text-text-main">
+<span class="material-symbols-outlined">accessibility_new</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col items-center justify-center p-6 w-full">
+<div class="w-full max-w-[560px] flex flex-col gap-6">
+<!-- Instructions -->
+<div class="text-center space-y-2">
+<h2 class="text-3xl md:text-4xl font-bold text-text-main tracking-tight">Identifíquese</h2>
+<p class="text-text-muted text-lg font-medium">Introduzca su DNI o NIE sin guiones para confirmar su llegada</p>
+</div>
+<!-- Giant Input Display -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-border-color text-3xl group-focus-within:text-primary transition-colors">badge</span>
+</div>
+<div class="w-full h-24 bg-background-alt rounded-2xl border-2 border-border-color flex items-center justify-center text-5xl font-mono tracking-[0.2em] text-text-main shadow-inner focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all overflow-hidden relative">
+<!-- Simulating Input Value -->
+<span class="z-10">4812<span class="text-primary/50">_</span></span>
+<!-- Blinking Cursor -->
+<span class="h-10 w-1 bg-primary cursor-blink ml-1 z-10 rounded-full"></span>
+</div>
+<!-- Validation Message Area -->
+<div class="absolute -bottom-6 left-0 w-full text-center">
+<p class="text-sm text-red-600 font-medium hidden opacity-0 transition-opacity" id="error-msg">Formato de documento no válido</p>
+</div>
+</div>
+<!-- Virtual Keypad -->
+<div class="bg-white p-6 rounded-3xl border border-border-color shadow-card mt-2">
+<div class="grid grid-cols-3 gap-4">
+<!-- Row 1 -->
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">1</button>
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">2</button>
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">3</button>
+<!-- Row 2 -->
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">4</button>
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">5</button>
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">6</button>
+<!-- Row 3 -->
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">7</button>
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">8</button>
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">9</button>
+<!-- Row 4 (Actions) -->
+<button class="h-20 w-full bg-background-alt border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-200 text-lg font-bold text-primary transition-all flex flex-col items-center justify-center hover:border-primary/30 group">
+<span class="group-active:scale-90 transition-transform">ABC</span>
+</button>
+<button class="h-20 w-full bg-white border border-gray-200 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-gray-50 text-3xl font-medium text-text-main transition-all flex items-center justify-center hover:border-gray-300">0</button>
+<button aria-label="Borrar" class="h-20 w-full bg-red-50 border border-red-100 rounded-xl shadow-key active:shadow-key-active active:translate-y-[2px] active:bg-red-100 text-red-600 transition-all flex items-center justify-center hover:border-red-200 group">
+<span class="material-symbols-outlined text-3xl group-active:scale-90 transition-transform">backspace</span>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-[72px] bg-primary hover:bg-primary-dark text-white rounded-2xl text-xl font-bold tracking-wide shadow-lg shadow-primary/20 active:shadow-none active:translate-y-[2px] transition-all flex items-center justify-center gap-3">
+<span>CONFIRMAR LLEGADA</span>
+<span class="material-symbols-outlined text-2xl">arrow_forward</span>
+</button>
+<!-- Walk-in Link -->
+<div class="text-center pt-2">
+<a class="inline-flex items-center gap-2 text-text-muted hover:text-primary font-medium text-base border-b border-transparent hover:border-primary transition-colors pb-0.5 group" href="#">
+<span>¿No tiene cita previa? Pulse aquí</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">chevron_right</span>
+</a>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-6 px-8 text-center border-t border-border-color bg-background-alt/50">
+<div class="flex flex-col items-center justify-center gap-2 max-w-[800px] mx-auto">
+<div class="flex items-center justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500 mb-2">
+<!-- Placeholder for Certifications/Logos using text or icons for now -->
+<div class="h-8 flex items-center gap-1">
+<span class="material-symbols-outlined text-2xl">security</span>
+<span class="text-xs font-bold uppercase">Datos Seguros</span>
+</div>
+<div class="h-4 w-px bg-gray-300"></div>
+<div class="h-8 flex items-center gap-1">
+<span class="material-symbols-outlined text-2xl">verified_user</span>
+<span class="text-xs font-bold uppercase">RGPD Cumplimiento</span>
+</div>
+</div>
+<p class="text-xs text-text-muted max-w-lg leading-relaxed">
+                Sus datos personales serán tratados de conformidad con el Reglamento General de Protección de Datos. 
+                El uso de este terminal implica la aceptación de la política de privacidad del centro.
+            </p>
+</div>
+</footer>
+</body></html>

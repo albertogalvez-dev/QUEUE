@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Consulta de Turno Móvil - ClinicQueue</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007a2f", // Andalusian Green tone
+                        "primary-dark": "#005f24",
+                        "background-light": "#f4f5f6",
+                        "background-dark": "#22262a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a1d21",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'inner-light': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom utilities for keypad interaction feel */
+        .keypad-btn:active {
+            transform: scale(0.95);
+            background-color: #e5e7eb;
+        }
+        .dark .keypad-btn:active {
+            background-color: #374151;
+        }
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-display min-h-screen flex flex-col transition-colors duration-300">
+<!-- Navbar / Minimal Header -->
+<header class="w-full px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
+<div class="flex items-center gap-3 select-none cursor-pointer">
+<div class="size-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Clinic<span class="text-primary">Queue</span></h1>
+</div>
+<!-- Theme Toggle / User Avatar placeholder -->
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-surface-dark px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
+<span class="flex h-2 w-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+                Sistema Operativo
+            </div>
+</div>
+</header>
+<!-- Main Content Centered -->
+<main class="flex-1 flex items-center justify-center p-4">
+<!-- Card Container -->
+<div class="bg-white dark:bg-surface-dark w-full max-w-[440px] rounded-3xl shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden relative">
+<!-- Decorative Top Gradient Line -->
+<div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-emerald-400"></div>
+<!-- Card Content -->
+<div class="p-6 sm:p-8 flex flex-col gap-6">
+<!-- Heading -->
+<div class="text-center space-y-2">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Consulta de Turno</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Selecciona tu método de identificación para ver el estado de tu cita.
+                    </p>
+</div>
+<!-- Tabs (Segmented Control) -->
+<div class="bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl flex relative">
+<!-- Active state simulation logic would go here in JS, visually hardcoded for design -->
+<button class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-white dark:bg-slate-700 text-primary dark:text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/5 transition-all text-center">
+                        DNI / NIE
+                    </button>
+<button class="flex-1 py-2.5 text-sm font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-colors text-center">
+                        Nº de Turno
+                    </button>
+</div>
+<!-- Input Display -->
+<div class="space-y-3">
+<label class="sr-only" for="id-input">Documento de Identidad</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">id_card</span>
+</div>
+<!-- Readonly input to simulate keypad usage primarily -->
+<input class="block w-full pl-12 pr-12 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-xl font-bold text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:border-primary focus:ring-0 transition-all text-center tracking-widest" id="id-input" placeholder="12345678Z" readonly="" type="text" value="482019"/>
+<div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+<!-- Blinking cursor indicator simulation if needed visually -->
+<div class="h-5 w-0.5 bg-primary animate-pulse"></div>
+</div>
+</div>
+<p class="text-xs text-center text-slate-400 dark:text-slate-500">
+                        Introduce los 8 dígitos y la letra (opcional)
+                    </p>
+</div>
+<!-- Virtual Keypad -->
+<div class="grid grid-cols-3 gap-3 px-2 sm:px-6 select-none">
+<!-- Row 1 -->
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">1</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">2</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">3</button>
+<!-- Row 2 -->
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">4</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">5</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">6</button>
+<!-- Row 3 -->
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">7</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">8</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">9</button>
+<!-- Row 4 -->
+<button class="keypad-btn h-14 w-full rounded-lg bg-slate-100 dark:bg-slate-800/50 border border-transparent text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-[20px]">keyboard_hide</span>
+</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm text-xl font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">0</button>
+<button class="keypad-btn h-14 w-full rounded-lg bg-rose-50 dark:bg-rose-900/20 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 flex items-center justify-center hover:bg-rose-100 dark:hover:bg-rose-900/40 transition-colors group">
+<span class="material-symbols-outlined text-[24px] group-active:scale-90 transition-transform">backspace</span>
+</button>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-lg h-14 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all transform hover:translate-y-[-1px] active:translate-y-[1px]">
+<span>Consultar Estado</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Footer / Privacy -->
+<div class="bg-slate-50 dark:bg-slate-800/50 px-6 py-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-slate-400 text-lg mt-0.5">lock</span>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-normal">
+<strong>Privacidad garantizada.</strong> No almacenamos tus datos personales. Esta búsqueda es anónima y cumple con la normativa de protección de datos.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Background Abstract shapes -->
+<div aria-hidden="true" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl"></div>
+</div>
+</body></html>

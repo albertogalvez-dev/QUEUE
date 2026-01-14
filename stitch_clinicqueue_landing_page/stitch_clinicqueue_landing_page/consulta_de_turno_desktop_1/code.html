@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicQueue - Consulta de Turno</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#12814a", // Andalusian Green inspired
+                        "primary-dark": "#0e6b3c",
+                        "primary-light": "#e0f2e9",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#17191c",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#23262b",
+                        "triage-red": "#E61A1A",
+                        "triage-orange": "#FF8C0A",
+                        "triage-yellow": "#FFC107",
+                        "triage-green": "#4CAF50",
+                        "triage-blue": "#2196F3",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                    boxShadow: {
+                        "card": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+                        "floating": "0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 23px; /* Center of the icon (48px / 2 approx) - adjusted */
+            width: 2px;
+            background-color: #e2e8f0;
+            z-index: 0;
+        }
+        .dark .timeline-line::before {
+            background-color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-display min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<!-- Logo -->
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 dark:bg-primary/20 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">ClinicQueue</h1>
+<p class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Servicio de Salud</p>
+</div>
+</div>
+<!-- Nav Links -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Tablero</a>
+<a class="text-sm font-medium text-primary border-b-2 border-primary py-5" href="#">Turnos</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Pantallas</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Configuración</a>
+</nav>
+<!-- User Profile -->
+<div class="flex items-center gap-4">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-semibold text-slate-900 dark:text-white">Dr. Alejandro V.</p>
+<p class="text-[10px] text-slate-500">Unidad de Gestión</p>
+</div>
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center ring-2 ring-white dark:ring-slate-800 shadow-sm" data-alt="Profile picture of a doctor in a white coat" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBcE4CJ8DBfnoJgS2_zco4_lzbsIZcTe746gqVrLTS_ZTIKdF1c6ALkw9HcEI2OZbxZZl-tnLiDZBJeqKUZDWer0kKYIb455YQvsXQ0DeSCOAUxDXW4mYtjfDg_x1oodlG8c3jnSxO0jzy9re3yOOYDk7KjemSRMOkh_E0wvkvdh8XeXOZTm3JrnUQsH4AzWBsneYp39blKuzUKS7nXkcc3K5dOStBNictMljHSFnlnZKEalZVpwgPjuGvMWFFivDVR60-h06EG-p4')"></div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Page Heading & Search -->
+<div class="mb-8 space-y-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Consulta de Turno</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Gestión y seguimiento de pacientes en tiempo real.</p>
+</div>
+<!-- Status Indicators -->
+<div class="flex items-center gap-3 bg-white dark:bg-surface-dark px-4 py-2 rounded-full shadow-sm border border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-semibold text-slate-600 dark:text-slate-300">SISTEMA ONLINE</span>
+</div>
+<div class="h-4 w-px bg-slate-200 dark:bg-slate-700"></div>
+<span class="text-xs text-slate-500">Hospital Central - Ala Norte</span>
+</div>
+</div>
+<!-- Search Module -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card border border-slate-100 dark:border-slate-800 p-1">
+<div class="flex flex-col md:flex-row">
+<!-- Tabs -->
+<div class="flex md:w-auto w-full border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-800">
+<button class="flex-1 md:flex-none px-6 py-4 flex items-center justify-center gap-2 text-primary bg-primary-light/30 dark:bg-primary/10 font-bold text-sm rounded-t-xl md:rounded-l-xl md:rounded-tr-none transition-all relative after:absolute after:bottom-0 after:left-0 after:w-full md:after:w-[3px] after:h-[3px] md:after:h-full after:bg-primary md:after:top-0 md:after:right-0 md:after:left-auto">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+                            Por DNI/NIE
+                        </button>
+<button class="flex-1 md:flex-none px-6 py-4 flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400 font-medium text-sm hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
+<span class="material-symbols-outlined text-[20px]">confirmation_number</span>
+                            Por Nº Turno
+                        </button>
+</div>
+<!-- Input -->
+<div class="flex-1 p-2 flex items-center">
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-3 bg-transparent border-0 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 sm:text-lg" placeholder="Introduce el documento de identidad..." type="text" value="12345678A"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-2">
+<button class="bg-primary hover:bg-primary-dark text-white p-2 rounded-lg transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px] block">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Split Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Status Focus (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- Status Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-floating border border-slate-100 dark:border-slate-700 overflow-hidden relative group">
+<!-- Decorative background pattern -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-bl-full -mr-16 -mt-16 pointer-events-none"></div>
+<div class="p-8 md:p-12 text-center relative z-10">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-sm font-bold mb-6 border border-emerald-200 dark:border-emerald-800/50 animate-pulse">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            EN CONSULTA
+                        </div>
+<h3 class="text-slate-500 dark:text-slate-400 text-sm font-bold tracking-widest uppercase mb-2">Turno Actual</h3>
+<div class="text-[80px] md:text-[120px] leading-none font-black tracking-tighter text-slate-900 dark:text-white mb-2 font-display">
+                            A-023
+                        </div>
+<div class="flex flex-col md:flex-row justify-center items-center gap-6 mt-8 pt-8 border-t border-slate-100 dark:border-slate-800">
+<div class="text-center px-6">
+<p class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Área</p>
+<p class="text-xl font-bold text-slate-800 dark:text-slate-200">Medicina General</p>
+</div>
+<div class="hidden md:block w-px h-12 bg-slate-200 dark:bg-slate-700"></div>
+<div class="text-center px-6">
+<p class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Puesto Asignado</p>
+<div class="flex items-center gap-2 justify-center text-primary">
+<span class="material-symbols-outlined">meeting_room</span>
+<p class="text-xl font-bold">Consulta 4</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Action Bar -->
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 flex justify-between items-center border-t border-slate-100 dark:border-slate-700">
+<span class="text-xs text-slate-500 font-medium ml-2">Actualizado hace 2 min</span>
+<div class="flex gap-2">
+<button class="p-2 text-slate-500 hover:text-primary hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all" title="Imprimir Ticket">
+<span class="material-symbols-outlined">print</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-primary hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-all" title="Enviar SMS">
+<span class="material-symbols-outlined">sms</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Patient Snapshot (Mini) -->
+<div class="bg-white dark:bg-surface-dark rounded-xl shadow-card border border-slate-200 dark:border-slate-700 p-6 flex items-start gap-4">
+<div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-full text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<h4 class="text-lg font-bold text-slate-900 dark:text-white">García López, María</h4>
+<div class="flex gap-4 mt-1 text-sm text-slate-500 dark:text-slate-400">
+<span>45 Años</span>
+<span>•</span>
+<span>DNI: ***5678A</span>
+</div>
+</div>
+<div class="ml-auto">
+<button class="text-primary hover:bg-primary/10 px-3 py-1.5 rounded-md text-sm font-semibold transition-colors">
+                            Ver Ficha
+                        </button>
+</div>
+</div>
+</div>
+<!-- Right Column: Context & History (5 cols) -->
+<div class="lg:col-span-5 space-y-6">
+<!-- Triage Context Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card border border-slate-200 dark:border-slate-700 overflow-hidden">
+<div class="p-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+<h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">medical_services</span>
+                            Nivel de Triaje
+                        </h3>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold px-2 py-1 rounded">MANCHESTER</span>
+</div>
+<div class="p-6">
+<!-- Current Triage Level Highlight -->
+<div class="flex items-center gap-4 mb-6 bg-triage-green/10 p-4 rounded-xl border border-triage-green/20">
+<div class="h-12 w-12 rounded-full bg-triage-green flex items-center justify-center text-white font-black text-xl shadow-lg ring-4 ring-white dark:ring-surface-dark">4</div>
+<div>
+<p class="text-triage-green font-extrabold text-lg uppercase tracking-tight">Estándar</p>
+<p class="text-slate-600 dark:text-slate-300 text-sm leading-tight">Atención normal. Tiempo de espera objetivo: 60 min.</p>
+</div>
+</div>
+<!-- Legend -->
+<div class="grid grid-cols-5 gap-1 text-center">
+<div class="flex flex-col items-center gap-1 opacity-40 hover:opacity-100 transition-opacity cursor-help" title="Resucitación">
+<div class="w-3 h-3 rounded-full bg-triage-red"></div>
+<span class="text-[10px] font-bold text-slate-400">1</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-40 hover:opacity-100 transition-opacity cursor-help" title="Emergencia">
+<div class="w-3 h-3 rounded-full bg-triage-orange"></div>
+<span class="text-[10px] font-bold text-slate-400">2</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-40 hover:opacity-100 transition-opacity cursor-help" title="Urgencia">
+<div class="w-3 h-3 rounded-full bg-triage-yellow"></div>
+<span class="text-[10px] font-bold text-slate-400">3</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-100">
+<div class="w-4 h-4 rounded-full bg-triage-green ring-2 ring-offset-1 ring-triage-green/50 dark:ring-offset-surface-dark"></div>
+<span class="text-[10px] font-bold text-slate-800 dark:text-white">4</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-40 hover:opacity-100 transition-opacity cursor-help" title="No urgente">
+<div class="w-3 h-3 rounded-full bg-triage-blue"></div>
+<span class="text-[10px] font-bold text-slate-400">5</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card border border-slate-200 dark:border-slate-700 p-6">
+<h3 class="font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">history</span>
+                        Historial del Turno
+                    </h3>
+<div class="relative timeline-line space-y-8 pl-2">
+<!-- Timeline Item: Active -->
+<div class="relative flex gap-4 z-10">
+<div class="flex-none">
+<div class="bg-primary text-white h-10 w-10 rounded-full flex items-center justify-center shadow-lg ring-4 ring-white dark:ring-surface-dark">
+<span class="material-symbols-outlined text-sm">stethoscope</span>
+</div>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-slate-900 dark:text-white text-sm">Llamada a Consulta</p>
+<span class="text-primary text-xs font-bold bg-primary/10 px-2 py-0.5 rounded">Ahora</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">El paciente ha sido llamado a la <span class="font-semibold text-slate-700 dark:text-slate-200">Consulta 4</span>.</p>
+<p class="text-xs text-slate-400 mt-1">09:45 AM</p>
+</div>
+</div>
+<!-- Timeline Item: Past -->
+<div class="relative flex gap-4 z-10 opacity-70">
+<div class="flex-none">
+<div class="bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 text-slate-400 h-10 w-10 rounded-full flex items-center justify-center ring-4 ring-white dark:ring-surface-dark">
+<span class="material-symbols-outlined text-sm">chair</span>
+</div>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-slate-800 dark:text-slate-200 text-sm">Sala de Espera</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Asignado a zona de espera general B.</p>
+<p class="text-xs text-slate-400 mt-1">09:20 AM</p>
+</div>
+</div>
+<!-- Timeline Item: Past -->
+<div class="relative flex gap-4 z-10 opacity-70">
+<div class="flex-none">
+<div class="bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-600 text-slate-400 h-10 w-10 rounded-full flex items-center justify-center ring-4 ring-white dark:ring-surface-dark">
+<span class="material-symbols-outlined text-sm">clinical_notes</span>
+</div>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-slate-800 dark:text-slate-200 text-sm">Triaje Realizado</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Evaluación completada por Enfermería.</p>
+<p class="text-xs text-slate-400 mt-1">09:15 AM</p>
+</div>
+</div>
+<!-- Timeline Item: Start -->
+<div class="relative flex gap-4 z-10 opacity-60">
+<div class="flex-none">
+<div class="bg-slate-100 dark:bg-slate-800 text-slate-400 h-10 w-10 rounded-full flex items-center justify-center ring-4 ring-white dark:ring-surface-dark">
+<span class="material-symbols-outlined text-sm">login</span>
+</div>
+</div>
+<div class="flex-1 pt-1">
+<div class="flex justify-between items-start mb-1">
+<p class="font-bold text-slate-800 dark:text-slate-200 text-sm">Llegada y Admisión</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Registro en mostrador principal.</p>
+<p class="text-xs text-slate-400 mt-1">09:00 AM</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-sm font-medium text-slate-500 hover:text-primary border border-dashed border-slate-300 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        Ver historial completo
+                    </button>
+</div>
+<!-- Helper Info -->
+<div class="bg-blue-50 dark:bg-blue-900/10 rounded-xl p-4 flex gap-3 border border-blue-100 dark:border-blue-900/30">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400">info</span>
+<p class="text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
+<strong>Nota:</strong> Los tiempos estimados pueden variar según la disponibilidad de personal médico y urgencias sobrevenidas.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+</body></html>

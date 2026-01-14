@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicQueue - Turno Finalizado</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e8549",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#131f18",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c22",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem", 
+                        "lg": "0.5rem", 
+                        "xl": "0.75rem", 
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display antialiased transition-colors duration-200">
+<!-- Top Navigation -->
+<header class="w-full bg-surface-light dark:bg-surface-dark border-b border-[#f1f4f2] dark:border-[#2a4034] px-6 py-4 sticky top-0 z-50">
+<div class="max-w-[960px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<h2 class="text-[#121714] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">ClinicQueue</h2>
+</div>
+<div class="flex gap-2">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-[#f1f4f2] dark:bg-[#2a4034] text-[#121714] dark:text-white hover:bg-gray-200 dark:hover:bg-[#365242] transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-[#f1f4f2] dark:bg-[#2a4034] text-[#121714] dark:text-white hover:bg-gray-200 dark:hover:bg-[#365242] transition-colors">
+<span class="material-symbols-outlined text-[20px]">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
+<div class="w-full max-w-[420px] flex flex-col gap-6 animate-fade-in">
+<!-- Status Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-sm border border-[#e5e7eb] dark:border-[#2a4034] overflow-hidden relative group">
+<!-- Decorative top gradient line -->
+<div class="h-1.5 w-full bg-gradient-to-r from-primary/40 via-primary to-primary/40"></div>
+<div class="p-8 flex flex-col items-center text-center">
+<!-- Icon Animation Wrapper -->
+<div class="mb-6 relative">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+<div class="relative size-16 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'wght' 600;">check_circle</span>
+</div>
+</div>
+<!-- Status Badge -->
+<div class="inline-flex h-8 items-center justify-center rounded-full bg-[#f1f4f2] dark:bg-[#2a4034] px-4 mb-8">
+<span class="text-[#596660] dark:text-gray-300 text-xs font-bold tracking-wider uppercase leading-none">Atención Finalizada</span>
+</div>
+<!-- Ticket Number -->
+<div class="mb-2">
+<span class="text-[#596660] dark:text-gray-400 text-sm font-medium uppercase tracking-widest">Turno</span>
+<h1 class="text-[#121714] dark:text-white text-6xl font-bold tracking-tight mt-1 tabular-nums">C-012</h1>
+</div>
+<!-- Divider -->
+<div class="w-16 h-1 bg-[#f1f4f2] dark:bg-[#2a4034] rounded-full my-6"></div>
+<!-- Message -->
+<div class="space-y-1">
+<h3 class="text-[#121714] dark:text-white font-semibold text-lg">¡Listo!</h3>
+<p class="text-[#596660] dark:text-gray-400 text-base font-normal leading-relaxed">
+                            Gracias por su visita.<br/>Su atención ha concluido exitosamente.
+                        </p>
+</div>
+</div>
+<!-- Secondary Actions Section (Inside Card) -->
+<div class="bg-[#f9fafb] dark:bg-[#15231b] border-t border-[#e5e7eb] dark:border-[#2a4034] p-4">
+<button class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white dark:hover:bg-[#1e2f24] border border-transparent hover:border-[#e5e7eb] dark:hover:border-[#2a4034] group/download transition-all duration-200 cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-[#f1f4f2] dark:bg-[#2a4034] flex items-center justify-center text-[#121714] dark:text-white group-hover/download:bg-primary/10 group-hover/download:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</div>
+<div class="text-left">
+<p class="text-sm font-semibold text-[#121714] dark:text-white">Resumen de tiempos</p>
+<p class="text-xs text-[#596660] dark:text-gray-400">Descargar comprobante PDF</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-[#596660] dark:text-gray-400 group-hover/download:text-primary transition-colors text-[20px]">download</span>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-6 bg-primary hover:bg-[#166e3a] text-white text-base font-bold leading-normal tracking-[0.015em] shadow-lg shadow-primary/20 hover:shadow-primary/30 transform hover:-translate-y-0.5 transition-all duration-200">
+<span class="mr-2">Volver al Inicio</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<p class="text-center text-xs text-[#8c9690] dark:text-gray-500 mt-2">
+                Sistema de Gestión de Filas © 2024
+            </p>
+</div>
+</main>
+<!-- Background Decoration (Subtle Pattern) -->
+<div class="fixed inset-0 pointer-events-none z-[-1] opacity-[0.4] dark:opacity-[0.1]" style="background-image: radial-gradient(#1e8549 0.5px, transparent 0.5px); background-size: 24px 24px;">
+</div>
+</body></html>

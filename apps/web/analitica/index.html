@@ -1,0 +1,588 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>QUEUE! - Analítica</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f7a5c",
+                        "primary-dark": "#165c45",
+                        "primary-light": "#e0f2f4",
+                        "background-light": "#fafafa",
+                        "background-dark": "#1c1e22",
+                        "surface-dark": "#2a2d33",
+                        "triage-red": "#E53E3E",
+                        "triage-orange": "#DD6B20",
+                        "triage-yellow": "#F6AD55",
+                        "triage-green": "#38A169",
+                        "triage-blue": "#3182CE",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#101818] dark:text-gray-100 font-display min-h-screen flex overflow-hidden">
+    <!-- Green Sidebar (unified) -->
+    <aside
+        class="w-20 lg:w-64 bg-primary flex flex-col justify-between h-full shadow-xl z-20 transition-all duration-300 flex-shrink-0">
+        <div class="flex flex-col">
+            <!-- Logo -->
+            <div class="h-20 flex items-center px-6 border-b border-white/10">
+                <div class="bg-white/90 p-1.5 rounded-lg mr-3 shadow-sm">
+                    <span class="material-symbols-outlined text-primary text-2xl">local_hospital</span>
+                </div>
+                <div class="hidden lg:flex flex-col">
+                    <span class="text-white font-bold text-lg leading-tight tracking-tight">QUEUE!</span>
+                    <span class="text-white/70 text-xs font-medium">Servicio de Salud</span>
+                </div>
+            </div>
+            <!-- Navigation -->
+            <nav class="flex flex-col gap-1 p-3 mt-4">
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="dashboard">
+                    <span class="material-symbols-outlined text-[24px]">dashboard</span>
+                    <span class="hidden lg:block text-sm font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="colas">
+                    <span class="material-symbols-outlined text-[24px]">queue_music</span>
+                    <span class="hidden lg:block text-sm font-medium">Gestión de Colas</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white sidebar-active group" href="#"
+                    data-nav="estadisticas">
+                    <span class="material-symbols-outlined text-[24px] fill-1">bar_chart</span>
+                    <span class="hidden lg:block text-sm font-bold">Estadísticas</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="config">
+                    <span class="material-symbols-outlined text-[24px]">settings</span>
+                    <span class="hidden lg:block text-sm font-medium">Configuración</span>
+                </a>
+            </nav>
+        </div>
+        <!-- User Profile -->
+        <div class="p-4 border-t border-white/10">
+            <div
+                class="flex items-center gap-3 bg-primary-dark/30 p-2 rounded-xl border border-white/5 hover:bg-primary-dark/50 cursor-pointer transition-colors">
+                <div
+                    class="size-10 rounded-full bg-primary/20 text-white flex items-center justify-center font-bold text-sm">
+                    DR</div>
+                <div class="hidden lg:flex flex-col overflow-hidden">
+                    <span class="text-white text-sm font-bold truncate">Dr. R. Martínez</span>
+                    <span class="text-white/60 text-xs truncate">Administrador</span>
+                </div>
+                <span class="material-symbols-outlined text-white/50 ml-auto text-lg hidden lg:block">expand_more</span>
+            </div>
+        </div>
+    </aside>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <!-- Header Sticky -->
+        <header
+            class="bg-white dark:bg-surface-dark border-b border-[#dae5e7] dark:border-gray-700 sticky top-0 z-10 px-6 py-4 flex items-center justify-between shrink-0">
+            <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2 text-sm text-[#5e888d] dark:text-gray-400">
+                    <span class="hover:text-primary cursor-pointer transition-colors">Inicio</span>
+                    <span class="material-symbols-outlined text-[12px] pt-0.5">chevron_right</span>
+                    <span class="font-semibold text-primary">Analítica</span>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-[#101818] dark:text-white">Rendimiento del Centro</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-700 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors relative">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span
+                        class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-surface-dark"></span>
+                </button>
+                <div
+                    class="h-10 w-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold">
+                    DR
+                </div>
+            </div>
+        </header>
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+            <div class="max-w-[1400px] mx-auto flex flex-col gap-8">
+                <!-- Filters & Actions -->
+                <div
+                    class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 bg-white dark:bg-surface-dark p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="flex flex-wrap items-end gap-4 w-full md:w-auto">
+                        <label class="flex flex-col gap-2 w-full md:w-48">
+                            <span
+                                class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Fecha</span>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined text-lg">calendar_today</span>
+                                <select
+                                    class="w-full h-11 pl-10 pr-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer text-[#101818] dark:text-white appearance-none">
+                                    <option>Hoy, 24 Oct</option>
+                                    <option>Últimos 7 días</option>
+                                    <option>Este mes</option>
+                                </select>
+                            </div>
+                        </label>
+                        <label class="flex flex-col gap-2 w-full md:w-48">
+                            <span
+                                class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Área
+                                Clínica</span>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined text-lg">filter_alt</span>
+                                <select
+                                    class="w-full h-11 pl-10 pr-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer text-[#101818] dark:text-white appearance-none">
+                                    <option>Todas las áreas</option>
+                                    <option>Medicina General</option>
+                                    <option>Pediatría</option>
+                                    <option>Traumatología</option>
+                                </select>
+                            </div>
+                        </label>
+                    </div>
+                    <button
+                        class="w-full md:w-auto flex items-center justify-center gap-2 h-11 px-6 bg-primary hover:bg-primary-dark text-white rounded-lg text-sm font-bold transition-all shadow-md hover:shadow-lg active:scale-95">
+                        <span class="material-symbols-outlined text-lg">download</span>
+                        Exportar Informe
+                    </button>
+                </div>
+                <!-- Live Feed Panel -->
+                <div
+                    class="bg-white dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-[#101818] dark:text-white flex items-center gap-2">
+                            <span class="relative flex h-3 w-3">
+                                <span id="live-indicator-ping"
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 hidden"></span>
+                                <span id="live-indicator-dot"
+                                    class="relative inline-flex rounded-full h-3 w-3 bg-gray-400"></span>
+                            </span>
+                            En Directo
+                            <span id="live-status-text" class="text-xs font-normal text-gray-500 ml-1">Offline</span>
+                        </h3>
+                    </div>
+                    <ul id="live-feed-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2 text-sm">
+                        <!-- Events will appear here -->
+                        <li class="text-gray-400 text-xs italic">Esperando eventos...</li>
+                    </ul>
+                </div>
+                <!-- KPI Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- KPI 1 -->
+                    <div
+                        class="bg-white dark:bg-surface-dark p-6 rounded-xl shadow-sm border-l-4 border-primary dark:border-primary flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Turnos Emitidos</p>
+                            <span
+                                class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded-md text-lg">confirmation_number</span>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-[#101818] dark:text-white" id="kpi-created">450</p>
+                            <p class="text-xs font-medium text-green-600 flex items-center mt-1">
+                                <span class="material-symbols-outlined text-sm mr-0.5">trending_up</span>
+                                +5% vs ayer
+                            </p>
+                        </div>
+                    </div>
+                    <!-- KPI 2 -->
+                    <div
+                        class="bg-white dark:bg-surface-dark p-6 rounded-xl shadow-sm border-l-4 border-triage-blue dark:border-triage-blue flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Atendidos</p>
+                            <span
+                                class="material-symbols-outlined text-triage-blue bg-triage-blue/10 p-1 rounded-md text-lg">medical_services</span>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-[#101818] dark:text-white" id="kpi-finished">412</p>
+                            <p class="text-xs font-medium text-green-600 flex items-center mt-1">
+                                <span class="material-symbols-outlined text-sm mr-0.5">check_circle</span>
+                                <span id="kpi-finished-rate">91% tasa atención</span>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- KPI 3 -->
+                    <div
+                        class="bg-white dark:bg-surface-dark p-6 rounded-xl shadow-sm border-l-4 border-triage-red dark:border-triage-red flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">No Presentados</p>
+                            <span
+                                class="material-symbols-outlined text-triage-red bg-triage-red/10 p-1 rounded-md text-lg">person_off</span>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-[#101818] dark:text-white" id="kpi-noshow">38</p>
+                            <p class="text-xs font-medium text-triage-red flex items-center mt-1">
+                                <span class="material-symbols-outlined text-sm mr-0.5">trending_down</span>
+                                <span id="kpi-noshow-rate">8.4% tasa abandono</span>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- KPI 4 -->
+                    <div
+                        class="bg-white dark:bg-surface-dark p-6 rounded-xl shadow-sm border-l-4 border-triage-orange dark:border-triage-orange flex flex-col justify-between h-32 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">Espera Media</p>
+                            <span
+                                class="material-symbols-outlined text-triage-orange bg-triage-orange/10 p-1 rounded-md text-lg">timer</span>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-[#101818] dark:text-white"><span id="kpi-wait">24</span>
+                                <span class="text-lg font-normal text-gray-500">min</span>
+                            </p>
+                            <p class="text-xs font-medium text-green-600 flex items-center mt-1">
+                                <span class="material-symbols-outlined text-sm mr-0.5">trending_down</span>
+                                -2m vs promedio
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Charts Area -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Line Chart Section -->
+                    <div
+                        class="lg:col-span-2 bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-[#101818] dark:text-white">Flujo de Pacientes</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Turnos emitidos por hora (08:00 -
+                                    20:00)</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-primary"></span>
+                                <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Hoy</span>
+                                <span class="w-3 h-3 rounded-full bg-gray-200 ml-2"></span>
+                                <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Ayer</span>
+                            </div>
+                        </div>
+                        <!-- Custom CSS Line Chart Representation -->
+                        <div class="flex-1 w-full min-h-[300px] relative mt-4">
+                            <!-- Y Axis Grid -->
+                            <div class="absolute inset-0 flex flex-col justify-between text-xs text-gray-400">
+                                <div class="w-full border-b border-gray-100 dark:border-gray-700/50 pb-1">80</div>
+                                <div class="w-full border-b border-gray-100 dark:border-gray-700/50 pb-1">60</div>
+                                <div class="w-full border-b border-gray-100 dark:border-gray-700/50 pb-1">40</div>
+                                <div class="w-full border-b border-gray-100 dark:border-gray-700/50 pb-1">20</div>
+                                <div class="w-full border-b border-gray-100 dark:border-gray-700/50 pb-1">0</div>
+                            </div>
+                            <!-- Chart Lines Container -->
+                            <div
+                                class="absolute inset-0 left-6 right-0 bottom-5 top-2 flex items-end justify-between px-2">
+                                <!-- Data Bars (Visual trick for Line Chart feeling without canvas) -->
+                                <!-- We simulate a continuous flow with closely spaced columns or SVG -->
+                                <svg class="w-full h-full overflow-visible" preserveaspectratio="none"
+                                    viewbox="0 0 100 100">
+                                    <!-- Secondary Line (Yesterday) -->
+                                    <polyline fill="none"
+                                        points="0,80 10,70 20,75 30,50 40,45 50,60 60,55 70,40 80,60 90,80 100,85"
+                                        stroke="#e2e8f0" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
+                                    <!-- Primary Line (Today) -->
+                                    <defs>
+                                        <lineargradient id="gradientPrimary" x1="0" x2="0" y1="0" y2="1">
+                                            <stop offset="0%" stop-color="#007c8a" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#007c8a" stop-opacity="0"></stop>
+                                        </lineargradient>
+                                    </defs>
+                                    <path
+                                        d="M0,100 L0,60 L10,50 L20,30 L30,35 L40,20 L50,25 L60,40 L70,30 L80,50 L90,70 L100,75 L100,100 Z"
+                                        fill="url(#gradientPrimary)" stroke="none"></path>
+                                    <polyline fill="none"
+                                        points="0,60 10,50 20,30 30,35 40,20 50,25 60,40 70,30 80,50 90,70 100,75"
+                                        stroke="#007c8a" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        vector-effect="non-scaling-stroke"></polyline>
+                                    <!-- Interactive Dots (Just visual) -->
+                                    <circle cx="40" cy="20" fill="#fff" r="1.5" stroke="#007c8a" stroke-width="0.5">
+                                    </circle>
+                                    <circle cx="70" cy="30" fill="#fff" r="1.5" stroke="#007c8a" stroke-width="0.5">
+                                    </circle>
+                                </svg>
+                            </div>
+                            <!-- X Axis Labels -->
+                            <div
+                                class="absolute bottom-[-20px] left-6 right-0 flex justify-between text-xs text-gray-400 font-medium">
+                                <span>08:00</span>
+                                <span>10:00</span>
+                                <span>12:00</span>
+                                <span>14:00</span>
+                                <span>16:00</span>
+                                <span>18:00</span>
+                                <span>20:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column Split -->
+                    <div class="flex flex-col gap-6">
+                        <!-- Wait Time Bar Chart -->
+                        <div
+                            class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between min-h-[240px]">
+                            <h3 class="text-base font-bold text-[#101818] dark:text-white mb-4">Espera por Área (min)
+                            </h3>
+                            <div class="flex flex-col gap-4">
+                                <!-- Bar 1 -->
+                                <div class="group">
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Traumatología</span>
+                                        <span class="font-bold text-[#101818] dark:text-white">45m</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-primary h-full rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <!-- Bar 2 -->
+                                <div class="group">
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Pediatría</span>
+                                        <span class="font-bold text-[#101818] dark:text-white">28m</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-primary/70 h-full rounded-full" style="width: 55%"></div>
+                                    </div>
+                                </div>
+                                <!-- Bar 3 -->
+                                <div class="group">
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Admisión</span>
+                                        <span class="font-bold text-[#101818] dark:text-white">12m</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-primary/40 h-full rounded-full" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                                <!-- Bar 4 -->
+                                <div class="group">
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">Vacunación</span>
+                                        <span class="font-bold text-[#101818] dark:text-white">5m</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-primary/20 h-full rounded-full" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Triage Donut Chart -->
+                        <div
+                            class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between flex-1">
+                            <h3 class="text-base font-bold text-[#101818] dark:text-white mb-2">Distribución Triaje</h3>
+                            <div class="flex items-center gap-6">
+                                <!-- CSS Conic Gradient Donut -->
+                                <div class="relative w-32 h-32 flex-shrink-0">
+                                    <div class="w-full h-full rounded-full" style="background: conic-gradient(
+                                            #E53E3E 0% 5%, 
+                                            #DD6B20 5% 15%, 
+                                            #F6AD55 15% 45%, 
+                                            #38A169 45% 85%, 
+                                            #3182CE 85% 100%
+                                         );">
+                                    </div>
+                                    <!-- Inner Circle -->
+                                    <div
+                                        class="absolute inset-4 bg-white dark:bg-surface-dark rounded-full flex flex-col items-center justify-center shadow-inner">
+                                        <span class="text-2xl font-bold text-[#101818] dark:text-white">412</span>
+                                        <span class="text-[10px] text-gray-400 font-medium uppercase">Total</span>
+                                    </div>
+                                </div>
+                                <!-- Legend -->
+                                <div class="flex flex-col gap-2 w-full">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-triage-red"></span>
+                                            <span class="text-gray-600 dark:text-gray-400">Nivel 1</span>
+                                        </div>
+                                        <span class="font-bold">5%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-triage-orange"></span>
+                                            <span class="text-gray-600 dark:text-gray-400">Nivel 2</span>
+                                        </div>
+                                        <span class="font-bold">10%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-triage-yellow"></span>
+                                            <span class="text-gray-600 dark:text-gray-400">Nivel 3</span>
+                                        </div>
+                                        <span class="font-bold">30%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-triage-green"></span>
+                                            <span class="text-gray-600 dark:text-gray-400">Nivel 4</span>
+                                        </div>
+                                        <span class="font-bold">40%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-triage-blue"></span>
+                                            <span class="text-gray-600 dark:text-gray-400">Nivel 5</span>
+                                        </div>
+                                        <span class="font-bold">15%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Detailed Table Section -->
+                <div
+                    class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-[#101818] dark:text-white">Actividad Reciente por Área</h3>
+                        <a class="text-sm font-bold text-primary hover:text-primary-dark" href="#">Ver reporte
+                            completo</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead
+                                class="bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 uppercase font-medium text-xs">
+                                <tr>
+                                    <th class="px-6 py-4">Área</th>
+                                    <th class="px-6 py-4">Responsable</th>
+                                    <th class="px-6 py-4 text-center">Estado Sala</th>
+                                    <th class="px-6 py-4 text-center">Turnos Activos</th>
+                                    <th class="px-6 py-4 text-right">Eficiencia</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-areas-body" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                    <td
+                                        class="px-6 py-4 font-medium text-[#101818] dark:text-white flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-lg">accessibility_new</span>
+                                        </div>
+                                        Traumatología
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">Dr. Martínez</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                            Saturada
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center font-bold text-[#101818] dark:text-white">12</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <span class="text-gray-600 dark:text-gray-400">85%</span>
+                                            <div
+                                                class="w-16 bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-yellow-500 h-full rounded-full" style="width: 85%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                    <td
+                                        class="px-6 py-4 font-medium text-[#101818] dark:text-white flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-lg">child_care</span>
+                                        </div>
+                                        Pediatría
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">Dra. Gómez</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                            Fluida
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center font-bold text-[#101818] dark:text-white">4</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <span class="text-gray-600 dark:text-gray-400">98%</span>
+                                            <div
+                                                class="w-16 bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-primary h-full rounded-full" style="width: 98%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                    <td
+                                        class="px-6 py-4 font-medium text-[#101818] dark:text-white flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-lg">medical_information</span>
+                                        </div>
+                                        Medicina General
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400">Dr. Ruiz</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+                                            Moderada
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center font-bold text-[#101818] dark:text-white">8</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <span class="text-gray-600 dark:text-gray-400">92%</span>
+                                            <div
+                                                class="w-16 bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-primary h-full rounded-full" style="width: 92%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <footer class="mt-12 mb-6 text-center text-xs text-gray-400 dark:text-gray-600">
+                <p>© 2026 QUEUE! System. Versión 2.4.1 (Andalucía Build)</p>
+            </footer>
+        </div>
+    </main>
+
+    <script type="module" src="/src/pages/analitica.ts"></script>
+</body>
+
+</html>

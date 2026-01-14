@@ -1,0 +1,538 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gestión de Colas Operador - QUEUE!</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f7a5c",
+                        "primary-dark": "#165942",
+                        "primary-light": "#e8f5f1",
+                        "background-light": "#f3f6f5",
+                        "background-dark": "#22252a",
+                        "surface-light": "#ffffff",
+                        "text-main": "#121715",
+                        "text-secondary": "#5a7069",
+                        "accent-red": "#d32f2f",
+                        "accent-orange": "#ed6c02",
+                        "accent-green": "#2e7d32",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                    boxShadow: {
+                        'soft': '0 2px 8px rgba(31, 122, 92, 0.04)',
+                        'card': '0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03)'
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .sidebar-active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #ffffff;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display h-screen flex overflow-hidden text-text-main antialiased selection:bg-primary/20">
+    <!-- Left Sidebar -->
+    <aside
+        class="w-20 lg:w-64 bg-primary flex flex-col justify-between h-full shadow-xl z-20 transition-all duration-300">
+        <div class="flex flex-col">
+            <!-- Logo -->
+            <div class="h-20 flex items-center px-6 border-b border-white/10">
+                <div class="bg-white/90 p-1.5 rounded-lg mr-3 shadow-sm">
+                    <span class="material-symbols-outlined text-primary text-2xl">local_hospital</span>
+                </div>
+                <div class="hidden lg:flex flex-col">
+                    <span class="text-white font-bold text-lg leading-tight tracking-tight">QUEUE!</span>
+                    <span class="text-white/70 text-xs font-medium">Servicio de Salud</span>
+                </div>
+            </div>
+            <!-- Navigation -->
+            <nav class="flex flex-col gap-1 p-3 mt-4">
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="dashboard">
+                    <span class="material-symbols-outlined text-[24px]">dashboard</span>
+                    <span class="hidden lg:block text-sm font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white sidebar-active group" href="#"
+                    data-nav="colas">
+                    <span class="material-symbols-outlined text-[24px] fill-1">queue_music</span>
+                    <span class="hidden lg:block text-sm font-bold">Gestión de Colas</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="estadisticas">
+                    <span class="material-symbols-outlined text-[24px]">bar_chart</span>
+                    <span class="hidden lg:block text-sm font-medium">Estadísticas</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="config">
+                    <span class="material-symbols-outlined text-[24px]">settings</span>
+                    <span class="hidden lg:block text-sm font-medium">Configuración</span>
+                </a>
+            </nav>
+        </div>
+        <!-- User Profile -->
+        <div class="p-4 border-t border-white/10">
+            <div
+                class="flex items-center gap-3 bg-primary-dark/30 p-2 rounded-xl border border-white/5 hover:bg-primary-dark/50 cursor-pointer transition-colors">
+                <div class="size-10 rounded-full bg-cover bg-center border-2 border-white/20"
+                    data-alt="Profile picture of a male doctor"
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqosagq_1EZmXXk4yOxxOVmXHaETU8o1zSPTXnq-LYAb_sY_vaS4dfjJ6O3RrlShMsYiQhOcA3ZMbnYA_p0QhciMbB8VFWOWGjaQWkvn1WYNjJ3Gdl4eBQybqCqMNxNEfkt_dYv8RgcUvFy9CVZ0r4djj5sJ4rlVWbEXvtmvqrH5uEvowljfgQfSujpsdiwvmKdyNhyK8kqJQvbPjdyK1723RN_7H7bOZhGULpw3ELzwkH_VIj94s5Z92nsOmpzBEvh396aYkfooY');">
+                </div>
+                <div class="hidden lg:flex flex-col overflow-hidden">
+                    <span class="text-white text-sm font-bold truncate">Dr. R. Martínez</span>
+                    <span class="text-white/60 text-xs truncate">Operador Jefe</span>
+                </div>
+                <span class="material-symbols-outlined text-white/50 ml-auto text-lg hidden lg:block">expand_more</span>
+            </div>
+        </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+        <!-- Top Header & Filters -->
+        <header class="bg-surface-light border-b border-gray-200 px-6 py-4 flex flex-col gap-4 shadow-sm z-10">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-text-main tracking-tight">Consola de Operador</h1>
+                    <p class="text-text-secondary text-sm">Área Consultas Externas • Planta 2</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Counter Selector -->
+                    <div id="counter-selector"
+                        class="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/20">
+                        <span class="material-symbols-outlined text-primary text-[18px]">desktop_windows</span>
+                        <span class="text-sm font-medium text-text-main hidden sm:inline">Puesto:</span>
+                        <select id="counter-select"
+                            class="bg-transparent border-0 text-sm font-bold text-primary focus:ring-0 cursor-pointer py-0 pr-6 pl-0">
+                            <option value="">Cargando...</option>
+                        </select>
+                    </div>
+                    <!-- Helpdesk Button (configured via VITE_HELPDESK_URL) -->
+                    <a id="helpdesk-btn" href="#" target="_blank" rel="noopener noreferrer"
+                        class="hidden items-center gap-2 bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full text-xs font-bold border border-blue-200 hover:bg-blue-100 transition-colors"
+                        title="Abrir Helpdesk">
+                        <span class="material-symbols-outlined text-sm">support_agent</span>
+                        Helpdesk
+                    </a>
+                    <button class="p-2 text-text-secondary hover:bg-gray-100 rounded-lg transition-colors relative">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span
+                            class="absolute top-2 right-2 size-2 bg-accent-red rounded-full border border-white"></span>
+                    </button>
+                </div>
+            </div>
+            <!-- Tabs and Quick Actions -->
+            <div class="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 mt-2">
+                <!-- Tabs -->
+                <div id="service-tabs"
+                    class="flex gap-6 border-b border-transparent w-full md:w-auto overflow-x-auto scrollbar-hide">
+                    <button class="relative pb-3 text-primary font-bold text-sm whitespace-nowrap group">
+                        Medicina General
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-t-full"></span>
+                        <span
+                            class="ml-2 bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-full align-middle">12</span>
+                    </button>
+                    <button
+                        class="relative pb-3 text-text-secondary hover:text-text-main font-medium text-sm whitespace-nowrap transition-colors">
+                        Traumatología
+                        <span
+                            class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary rounded-t-full transition-all group-hover:w-full"></span>
+                        <span
+                            class="ml-2 bg-gray-100 text-text-secondary text-[10px] px-1.5 py-0.5 rounded-full align-middle border border-gray-200">5</span>
+                    </button>
+                    <button
+                        class="relative pb-3 text-text-secondary hover:text-text-main font-medium text-sm whitespace-nowrap transition-colors">
+                        Enfermería
+                        <span
+                            class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary rounded-t-full transition-all group-hover:w-full"></span>
+                        <span
+                            class="ml-2 bg-gray-100 text-text-secondary text-[10px] px-1.5 py-0.5 rounded-full align-middle border border-gray-200">8</span>
+                    </button>
+                    <button
+                        class="relative pb-3 text-text-secondary hover:text-text-main font-medium text-sm whitespace-nowrap transition-colors">
+                        Pediatría
+                        <span
+                            class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary rounded-t-full transition-all group-hover:w-full"></span>
+                        <span
+                            class="ml-2 bg-gray-100 text-text-secondary text-[10px] px-1.5 py-0.5 rounded-full align-middle border border-gray-200">2</span>
+                    </button>
+                </div>
+                <!-- Filters -->
+                <div class="flex gap-2 w-full md:w-auto">
+                    <div class="relative group w-full md:w-64">
+                        <span
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors material-symbols-outlined text-[20px]">search</span>
+                        <input
+                            class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                            placeholder="Buscar paciente o turno..." type="text" />
+                    </div>
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-text-main hover:bg-gray-50 transition-colors shadow-sm">
+                        <span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        <span class="hidden sm:inline">Filtros</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- Queue Content -->
+        <div class="flex-1 overflow-y-auto p-6 bg-background-light">
+            <div class="flex flex-col lg:flex-row gap-6 h-full">
+                <!-- Main Table Section -->
+                <div
+                    class="flex-1 bg-surface-light rounded-xl border border-gray-200 shadow-soft overflow-hidden flex flex-col h-fit min-h-[500px]">
+                    <div class="overflow-x-auto flex-1">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-gray-50/50 border-b border-gray-100 text-xs uppercase tracking-wider text-text-secondary font-semibold">
+                                    <th class="px-6 py-4 w-24">Turno</th>
+                                    <th class="px-6 py-4 w-32">Tipo</th>
+                                    <th class="px-6 py-4 w-40">Triaje</th>
+                                    <th class="px-6 py-4 w-32">Espera</th>
+                                    <th class="px-6 py-4">Notas Clínicas</th>
+                                    <th class="px-6 py-4 w-32 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="queue-tbody" class="divide-y divide-gray-100">
+                                <!-- Row 1 - High Priority -->
+                                <tr class="group hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <span class="text-xl font-bold text-text-main">B-012</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-1.5 text-text-secondary font-medium text-sm">
+                                            <span class="material-symbols-outlined text-[18px]">stethoscope</span>
+                                            Consulta
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-accent-red/10 text-accent-red border border-accent-red/20">
+                                            <span class="size-1.5 rounded-full bg-accent-red"></span>
+                                            URGENTE
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-accent-red font-bold text-sm">15 min</span>
+                                        <div class="w-full bg-gray-100 rounded-full h-1 mt-1.5 overflow-hidden">
+                                            <div class="bg-accent-red h-1 rounded-full w-[85%]"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm text-text-main truncate max-w-[200px]">Fiebre alta (39.5°C),
+                                            malestar general.</p>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button
+                                            class="bg-primary hover:bg-primary-dark text-white text-sm font-bold py-2 px-4 rounded-lg shadow-sm hover:shadow-md transition-all active:scale-95 flex items-center gap-2 ml-auto">
+                                            <span class="material-symbols-outlined text-[18px]">campaign</span>
+                                            LLAMAR
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 2 - Medium Priority -->
+                                <tr class="group hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <span class="text-xl font-bold text-text-main">B-018</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-1.5 text-text-secondary font-medium text-sm">
+                                            <span class="material-symbols-outlined text-[18px]">medical_services</span>
+                                            Revisión
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-accent-orange/10 text-accent-orange border border-accent-orange/20">
+                                            <span class="size-1.5 rounded-full bg-accent-orange"></span>
+                                            PREFERENTE
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-accent-orange font-bold text-sm">12 min</span>
+                                        <div class="w-full bg-gray-100 rounded-full h-1 mt-1.5 overflow-hidden">
+                                            <div class="bg-accent-orange h-1 rounded-full w-[60%]"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm text-text-main truncate max-w-[200px]">Dolor abdominal
+                                            persistente.</p>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button
+                                            class="bg-white border border-gray-300 text-text-main hover:bg-gray-50 text-sm font-bold py-2 px-4 rounded-lg transition-all active:scale-95 flex items-center gap-2 ml-auto">
+                                            <span class="material-symbols-outlined text-[18px]">campaign</span>
+                                            LLAMAR
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 3 - Normal -->
+                                <tr class="group hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <span class="text-xl font-bold text-text-main">A-045</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-1.5 text-text-secondary font-medium text-sm">
+                                            <span class="material-symbols-outlined text-[18px]">vaccines</span>
+                                            Curas
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-accent-green/10 text-accent-green border border-accent-green/20">
+                                            <span class="size-1.5 rounded-full bg-accent-green"></span>
+                                            NORMAL
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-text-secondary font-bold text-sm">32 min</span>
+                                        <div class="w-full bg-gray-100 rounded-full h-1 mt-1.5 overflow-hidden">
+                                            <div class="bg-accent-green h-1 rounded-full w-[30%]"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm text-text-main truncate max-w-[200px]">Retirada de puntos
+                                            sutura.</p>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button
+                                            class="bg-white border border-gray-300 text-text-main hover:bg-gray-50 text-sm font-bold py-2 px-4 rounded-lg transition-all active:scale-95 flex items-center gap-2 ml-auto">
+                                            <span class="material-symbols-outlined text-[18px]">campaign</span>
+                                            LLAMAR
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 4 - Normal -->
+                                <tr class="group hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <span class="text-xl font-bold text-text-main">C-002</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-1.5 text-text-secondary font-medium text-sm">
+                                            <span class="material-symbols-outlined text-[18px]">assignment</span>
+                                            Administrativo
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-accent-green/10 text-accent-green border border-accent-green/20">
+                                            <span class="size-1.5 rounded-full bg-accent-green"></span>
+                                            NORMAL
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-text-secondary font-bold text-sm">05 min</span>
+                                        <div class="w-full bg-gray-100 rounded-full h-1 mt-1.5 overflow-hidden">
+                                            <div class="bg-accent-green h-1 rounded-full w-[10%]"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm text-text-main truncate max-w-[200px] text-gray-400 italic">
+                                            Sin notas adicionales.</p>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button
+                                            class="bg-white border border-gray-300 text-text-main hover:bg-gray-50 text-sm font-bold py-2 px-4 rounded-lg transition-all active:scale-95 flex items-center gap-2 ml-auto">
+                                            <span class="material-symbols-outlined text-[18px]">campaign</span>
+                                            LLAMAR
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 5 - Normal -->
+                                <tr class="group hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <span class="text-xl font-bold text-text-main">A-050</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-1.5 text-text-secondary font-medium text-sm">
+                                            <span class="material-symbols-outlined text-[18px]">stethoscope</span>
+                                            Consulta
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-accent-green/10 text-accent-green border border-accent-green/20">
+                                            <span class="size-1.5 rounded-full bg-accent-green"></span>
+                                            NORMAL
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-text-secondary font-bold text-sm">45 min</span>
+                                        <div class="w-full bg-gray-100 rounded-full h-1 mt-1.5 overflow-hidden">
+                                            <div class="bg-accent-green h-1 rounded-full w-[45%]"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm text-text-main truncate max-w-[200px]">Revision anual
+                                            rutinaria.</p>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button
+                                            class="bg-white border border-gray-300 text-text-main hover:bg-gray-50 text-sm font-bold py-2 px-4 rounded-lg transition-all active:scale-95 flex items-center gap-2 ml-auto">
+                                            <span class="material-symbols-outlined text-[18px]">campaign</span>
+                                            LLAMAR
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between bg-white">
+                        <p class="text-sm text-text-secondary">Mostrando <span
+                                class="font-bold text-text-main">1-5</span> de <span
+                                class="font-bold text-text-main">12</span> pacientes</p>
+                        <div class="flex gap-2">
+                            <button
+                                class="p-2 rounded-lg border border-gray-200 text-text-secondary hover:bg-gray-50 disabled:opacity-50">
+                                <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                            </button>
+                            <button class="p-2 rounded-lg border border-gray-200 text-text-secondary hover:bg-gray-50">
+                                <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right Sidebar - Active Status -->
+                <div id="active-cards" class="w-full lg:w-80 flex flex-col gap-4">
+                    <div class="flex items-center justify-between mb-1">
+                        <h2 class="text-sm font-bold text-text-secondary tracking-wide uppercase">En Atención</h2>
+                        <span class="text-xs font-medium bg-green-100 text-green-700 px-2 py-0.5 rounded-full">En
+                            vivo</span>
+                    </div>
+                    <!-- Active Card 1 -->
+                    <div
+                        class="bg-surface-light p-4 rounded-xl border border-gray-200 shadow-card relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-accent-red"></div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-text-main">Puesto 1</h3>
+                                <p class="text-xs text-text-secondary">Dr. R. Martínez</p>
+                            </div>
+                            <span class="flex h-2.5 w-2.5 relative">
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-red"></span>
+                            </span>
+                        </div>
+                        <div
+                            class="flex flex-col items-center justify-center bg-red-50/50 rounded-lg py-3 border border-red-100 mb-3">
+                            <span class="text-3xl font-extrabold text-text-main tracking-tight">A-042</span>
+                            <span class="text-xs text-text-secondary font-medium mt-1">En consulta</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-text-secondary">
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">schedule</span>
+                                12:45 min
+                            </span>
+                            <button class="text-primary font-bold hover:underline">Finalizar</button>
+                        </div>
+                    </div>
+                    <!-- Active Card 2 -->
+                    <div
+                        class="bg-surface-light p-4 rounded-xl border border-gray-200 shadow-card relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-accent-red"></div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-text-main">Puesto 2</h3>
+                                <p class="text-xs text-text-secondary">Dra. S. Lopez</p>
+                            </div>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-red"></span>
+                        </div>
+                        <div
+                            class="flex flex-col items-center justify-center bg-red-50/50 rounded-lg py-3 border border-red-100 mb-3">
+                            <span class="text-3xl font-extrabold text-text-main tracking-tight">B-011</span>
+                            <span class="text-xs text-text-secondary font-medium mt-1">En consulta</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-text-secondary">
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">schedule</span>
+                                04:20 min
+                            </span>
+                            <!-- Disabled visual state for other doctors -->
+                            <span class="text-gray-300 font-bold cursor-not-allowed">Finalizar</span>
+                        </div>
+                    </div>
+                    <!-- Available Card -->
+                    <div
+                        class="bg-surface-light p-4 rounded-xl border border-dashed border-gray-300 shadow-none relative overflow-hidden opacity-80 hover:opacity-100 transition-opacity">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-accent-green"></div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-bold text-text-main">Puesto 3</h3>
+                                <p class="text-xs text-text-secondary">Enf. J. Garcia</p>
+                            </div>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-green"></span>
+                        </div>
+                        <div
+                            class="flex flex-col items-center justify-center bg-green-50/30 rounded-lg py-3 border border-green-100/50 mb-3 h-[74px]">
+                            <span class="text-sm font-bold text-accent-green flex items-center gap-2">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                DISPONIBLE
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-text-secondary">
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">history</span>
+                                Último: A-030
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Stats Quick View -->
+                    <div
+                        class="mt-auto bg-primary text-white rounded-xl p-4 shadow-lg bg-gradient-to-br from-primary to-primary-dark">
+                        <h4 class="text-sm font-medium opacity-90 mb-3 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">trending_up</span>
+                            Resumen Actual
+                        </h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <span id="stats-waiting" class="text-2xl font-bold block">12</span>
+                                <span class="text-xs opacity-70">En Espera</span>
+                            </div>
+                            <div>
+                                <span class="text-2xl font-bold block">18m</span>
+                                <span class="text-xs opacity-70">Tiempo Medio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/src/pages/operador.ts"></script>
+</body>
+
+</html>

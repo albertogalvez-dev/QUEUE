@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>QUEUE! | Servicio de Salud</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007a33",
+                        "background-light": "#f4f5f5",
+                        "background-dark": "#242628",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#101814] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Header -->
+    <header class="bg-white dark:bg-[#1e2022] border-b border-[#e0e5e2] dark:border-[#333] sticky top-0 z-50">
+        <div class="layout-container max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-primary/10 text-primary p-2 rounded-lg">
+                        <span class="material-symbols-outlined text-3xl">local_hospital</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold leading-tight tracking-tight text-[#101814] dark:text-white">
+                            QUEUE!
+                        </h1>
+                        <p class="text-xs font-medium text-[#5e8d71] uppercase tracking-wide">Servicio de Salud</p>
+                    </div>
+                </div>
+                <!-- Right Actions -->
+                <div class="flex items-center gap-4 sm:gap-6">
+                    <button id="btn-reset-demo"
+                        class="hidden sm:flex items-center justify-center h-10 px-4 gap-2 text-sm font-bold text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-200">
+                        <span class="material-symbols-outlined text-[20px]">restart_alt</span>
+                        <span>Reset Demo</span>
+                    </button>
+                    <button
+                        class="hidden sm:flex items-center justify-center h-10 px-4 gap-2 text-sm font-bold text-primary hover:bg-primary/5 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">help</span>
+                        <span>Soporte</span>
+                    </button>
+                    <div class="h-8 w-[1px] bg-[#e0e5e2] dark:bg-[#333] hidden sm:block"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden md:block">
+                            <p class="text-sm font-bold text-[#101814] dark:text-white">Admin. General</p>
+                            <p class="text-xs text-[#5e8d71]">Hospital Central</p>
+                        </div>
+                        <div class="size-10 rounded-full bg-cover bg-center border-2 border-white dark:border-[#333] shadow-sm"
+                            data-alt="Avatar of the current user"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBdt4KtgiqQAqVg__gLn9g1LMf0rV1wGuIFHVyx692TGknL5QYZxJHU0PBmPPEwr3JmADMDoRMOu8CglAMnqax9Jt1stngCscMjKFFlVJW-GdG7eBluqqWV_DOIAKYc464TPVi1CRu6v-BUfBOWVFBYr0bAYtT4GQK8kHSElPkfXHSYf2phZw5lQnHm3j_HfSzthJT6cqudYIvjOnAn7bczdJYNuhSrK5wg9KX3nQkqyn4zH9frFrpZZ7gs99jN7DGd9Mn22KXVgos");'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main
+        class="flex-grow layout-container max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full flex flex-col">
+        <!-- Page Heading -->
+        <div class="mb-10 sm:mb-14 text-center max-w-3xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#101814] dark:text-white mb-4 tracking-tight">
+                Bienvenido al Sistema
+            </h2>
+            <p class="text-[#5e8d71] dark:text-[#8abca0] text-lg leading-relaxed">
+                Seleccione el módulo correspondiente para iniciar operaciones. Este terminal permite gestionar el flujo
+                de pacientes, la administración de turnos y la visualización pública.
+            </p>
+        </div>
+        <!-- Role Selection Cards (The "Big Three") -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <!-- Card 1: Kiosco -->
+            <a href="/kiosco/"
+                class="group relative flex flex-col bg-white dark:bg-[#1e2022] rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_24px_rgba(0,122,51,0.12)] transition-all duration-300 border border-transparent hover:border-primary/20 overflow-hidden h-full no-underline">
+                <div class="h-48 w-full bg-cover bg-center relative"
+                    data-alt="Close up of a hand using a touchscreen kiosk interface"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfL0X6OCYu-fcPP0a6BHYYDY2MyXtXrI4LycvGsSgl_p9v1Y3aZ8WTd3s13N2EgCOoIMhmNcSgFsjT9nea2Tje2lg0dSBGlN4I5cCm78bXwYqWyPitKq1nNls4d3_tgwSJviV0rx5heAyP7H2dpkpOhX0KQApwo0Pt5oQYhvguzZ-4eO8uNiJz0TMEB-ITm8U3R-ifqtuuhIa9cxO5q9yNcebV407Wo4XbKWRnASnqLwXte_QX7alCg9GYlms9GBpm99sYD6ZEwFE");'>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="material-symbols-outlined text-4xl mb-1 block">touch_app</span>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold text-[#101814] dark:text-white mb-2">Kiosco de Entrada</h3>
+                    <p class="text-[#5e8d71] dark:text-[#a0c4b0] text-sm leading-relaxed mb-6 flex-grow">
+                        Interfaz táctil para la auto-identificación de pacientes y emisión de tickets a la llegada al
+                        centro.
+                    </p>
+                    <span
+                        class="w-full flex items-center justify-center h-12 px-6 bg-primary hover:bg-[#00662b] text-white text-sm font-bold rounded-lg transition-colors group-hover:scale-[1.02] duration-200">
+                        Iniciar Kiosco
+                    </span>
+                </div>
+            </a>
+            <!-- Card 2: Operador -->
+            <a href="/operador/login/"
+                class="group relative flex flex-col bg-white dark:bg-[#1e2022] rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_24px_rgba(0,122,51,0.12)] transition-all duration-300 border border-transparent hover:border-primary/20 overflow-hidden h-full no-underline">
+                <div class="h-48 w-full bg-cover bg-center relative"
+                    data-alt="Doctor looking at a computer monitor in a bright office"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBC8FEJVJM8Eq2-JMOHG7gg80kv3jCB9H8LhpGQjgb8jdYtQEFDZmlWs7399eL-wIx9lCxYA51w5Q4l9PK6Sl64DyKdRlHRWdep2ppx2PbQ67VSXz63VrbgX1JTrjcFmGebHWctPFp6YlDmyS0RInEHj-L_bNIdIgDYAJXc4oPvLaYeCPmBpY5-uVtqKkgYNyN2rmjlS6YCayMlXuw_Ii2LeQWLZXQkvhyp0xtLVxS4EP2I3QfMnPYfy4QL156UhlcAVKPsNjTuP7c");'>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="material-symbols-outlined text-4xl mb-1 block">desktop_windows</span>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold text-[#101814] dark:text-white mb-2">Consola del Operador</h3>
+                    <p class="text-[#5e8d71] dark:text-[#a0c4b0] text-sm leading-relaxed mb-6 flex-grow">
+                        Panel de gestión para personal administrativo y sanitario. Control de colas y llamada de
+                        pacientes.
+                    </p>
+                    <span
+                        class="w-full flex items-center justify-center h-12 px-6 bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white text-sm font-bold rounded-lg transition-all group-hover:scale-[1.02] duration-200">
+                        Acceder al Sistema
+                    </span>
+                </div>
+            </a>
+            <!-- Card 3: Pantalla -->
+            <a href="/pantalla/"
+                class="group relative flex flex-col bg-white dark:bg-[#1e2022] rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_24px_rgba(0,122,51,0.12)] transition-all duration-300 border border-transparent hover:border-primary/20 overflow-hidden h-full no-underline">
+                <div class="h-48 w-full bg-cover bg-center relative"
+                    data-alt="Empty waiting room with comfortable chairs"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZQW4x4IM-FyUBxmjqhzimjJd4J6rW5ZOepd88zCnoG7bpOSKiwjedvK4Lu7lhEVCWDvLRWrVlOnhNOlia1tiQXvABJt7FdYVCgEiOia8Sr-oP7bbBl6VowoLPhapn696Z2wGaGpdVgecImSq_L82CeEdoq-APwmaOEg5n3nom0t4ZoYZxpGlwU4iabrJ-WQw-CTYhXl-unUAemt2gW_3X1p08sX9tLS_pa80K44358Hg0QG4VubPjZWwtqmp8OB06ZBGFZoPZcaE");'>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="material-symbols-outlined text-4xl mb-1 block">tv</span>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold text-[#101814] dark:text-white mb-2">Pantalla Sala de Espera</h3>
+                    <p class="text-[#5e8d71] dark:text-[#a0c4b0] text-sm leading-relaxed mb-6 flex-grow">
+                        Visualización pública de turnos actuales, anuncios y llamadas a consulta para salas de espera.
+                    </p>
+                    <span
+                        class="w-full flex items-center justify-center h-12 px-6 bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white text-sm font-bold rounded-lg transition-all group-hover:scale-[1.02] duration-200">
+                        Ver Pantalla
+                    </span>
+                </div>
+            </a>
+        </div>
+        <!-- Instructional Section: "Cómo funciona" -->
+        <div
+            class="bg-white dark:bg-[#1e2022] rounded-xl p-8 sm:p-12 shadow-sm border border-[#e0e5e2] dark:border-[#333]">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 sm:gap-4">
+                <div class="w-full md:w-auto md:mr-8 text-center md:text-left min-w-[200px]">
+                    <h3 class="text-2xl font-bold text-[#101814] dark:text-white mb-2">¿Cómo funciona?</h3>
+                    <p class="text-sm text-[#5e8d71] dark:text-[#8abca0]">Flujo de atención en 3 pasos</p>
+                </div>
+                <!-- Steps Container -->
+                <div class="flex flex-col sm:flex-row gap-6 lg:gap-12 w-full justify-around">
+                    <!-- Step 1 -->
+                    <div class="flex items-start gap-4 flex-1">
+                        <div
+                            class="flex-shrink-0 size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl">badge</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#101814] dark:text-white mb-1">1. Identificación</p>
+                            <p class="text-sm text-[#5e8d71] dark:text-[#a0c4b0] leading-snug">El paciente se identifica
+                                con su tarjeta sanitaria en el Kiosco.</p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex items-start gap-4 flex-1">
+                        <div
+                            class="flex-shrink-0 size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#101814] dark:text-white mb-1">2. Obtención de Turno</p>
+                            <p class="text-sm text-[#5e8d71] dark:text-[#a0c4b0] leading-snug">Se emite un ticket con un
+                                código único y sala de espera.</p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex items-start gap-4 flex-1">
+                        <div
+                            class="flex-shrink-0 size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl">medical_services</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#101814] dark:text-white mb-1">3. Atención</p>
+                            <p class="text-sm text-[#5e8d71] dark:text-[#a0c4b0] leading-snug">El profesional llama al
+                                paciente a través de las pantallas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-[#1e2022] border-t border-[#e0e5e2] dark:border-[#333] mt-auto">
+        <div class="layout-container max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#5e8d71]">
+                <div class="flex items-center gap-2">
+                    <span class="font-bold">QUEUE! System</span>
+                    <span>v2.4.0</span>
+                </div>
+                <div class="flex gap-6">
+                    <a class="hover:text-primary transition-colors" href="#">Política de Privacidad</a>
+                    <a class="hover:text-primary transition-colors" href="#">Términos de Uso</a>
+                    <a class="hover:text-primary transition-colors" href="#">Manual de Usuario</a>
+                </div>
+                <div class="text-right opacity-70">
+                    © 2026 Servicio de Salud. Todos los derechos reservados.
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script type="module" src="/src/pages/index.ts"></script>
+</body>
+
+</html>

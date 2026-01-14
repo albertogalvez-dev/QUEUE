@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Consulta de Turno Móvil - QUEUE!</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007a2f",
+                        "primary-dark": "#005f24",
+                        "background-light": "#f4f5f6",
+                        "background-dark": "#22262a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a1d21",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'inner-light': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .keypad-btn:active {
+            transform: scale(0.95);
+            background-color: #e5e7eb;
+        }
+
+        .dark .keypad-btn:active {
+            background-color: #374151;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-display min-h-screen flex flex-col transition-colors duration-300">
+    <!-- Navbar / Minimal Header -->
+    <header class="w-full px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
+        <a href="/projects/queue/demo/" class="flex items-center gap-3 select-none cursor-pointer">
+            <div class="size-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-2xl">local_hospital</span>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">QUEUE<span
+                    class="text-primary">!</span></h1>
+        </a>
+        <div class="flex items-center gap-4">
+            <a id="link-pantalla" href="/projects/queue/demo/pantalla/"
+                class="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-primary flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">tv</span>
+                Ver pantalla
+            </a>
+        </div>
+    </header>
+    <!-- Main Content Centered -->
+    <main class="flex-1 flex items-center justify-center p-4">
+        <!-- Card Container -->
+        <div
+            class="bg-white dark:bg-surface-dark w-full max-w-[440px] rounded-3xl shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden relative">
+            <!-- Decorative Top Gradient Line -->
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-emerald-400"></div>
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8 flex flex-col gap-6">
+                <!-- Heading -->
+                <div class="text-center space-y-2">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Consulta de Turno</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Introduce tu número de turno o DNI para ver el estado.
+                    </p>
+                </div>
+
+                <!-- Tabs (Segmented Control) -->
+                <div id="turno-tabs" class="bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl flex relative">
+                    <button data-tab="ticket"
+                        class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-white dark:bg-slate-700 text-primary dark:text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/5 transition-all text-center">
+                        Nº de Turno
+                    </button>
+                    <button data-tab="dni"
+                        class="flex-1 py-2.5 text-sm font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 transition-colors text-center">
+                        DNI / NIE
+                    </button>
+                </div>
+
+                <!-- Input Ticket -->
+                <form id="turno-form" class="space-y-3">
+                    <label class="sr-only" for="input-ticket">Número de Turno</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span
+                                class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">confirmation_number</span>
+                        </div>
+                        <input
+                            class="block w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-xl font-bold text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:border-primary focus:ring-0 transition-all text-center tracking-widest"
+                            id="input-ticket" placeholder="A-023" type="text" value="" />
+                    </div>
+                    <p id="input-hint" class="text-xs text-center text-slate-400 dark:text-slate-500">
+                        Ejemplo: A-023, E-001, C-010
+                    </p>
+                </form>
+
+                <!-- Error Message -->
+                <div id="turno-error"
+                    class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-red-500 text-xl">error</span>
+                        <div>
+                            <p id="turno-error-text" class="text-sm font-medium text-red-700 dark:text-red-400">No se
+                                encuentra el turno</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ticket Result Card -->
+                <div id="turno-card"
+                    class="hidden bg-slate-50 dark:bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <!-- Status Header -->
+                    <div id="turno-status-header" class="bg-primary text-white px-6 py-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-2xl">schedule</span>
+                                <div>
+                                    <p id="turno-estado" class="text-lg font-bold">En espera</p>
+                                    <p id="turno-estado-desc" class="text-sm opacity-80">Espere a ser llamado</p>
+                                </div>
+                            </div>
+                            <div id="turno-codigo" class="text-3xl font-black">A-023</div>
+                        </div>
+                    </div>
+                    <!-- Details -->
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-400">medical_services</span>
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider">Servicio</p>
+                                <p id="turno-servicio" class="font-bold text-slate-900 dark:text-white">Admisión</p>
+                            </div>
+                        </div>
+                        <div id="turno-puesto-container" class="hidden flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-400">meeting_room</span>
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider">Acudir a</p>
+                                <p id="turno-puesto" class="font-bold text-slate-900 dark:text-white">Ventanilla 1</p>
+                            </div>
+                        </div>
+                        <div id="turno-triaje-container" class="hidden flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-400">priority_high</span>
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider">Prioridad</p>
+                                <div class="flex items-center gap-2">
+                                    <span id="turno-triaje"
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold">Normal</span>
+                                    <span id="turno-preferente"
+                                        class="hidden inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-700 border border-orange-200">PREFERENTE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="turno-posicion-container" class="hidden flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-400">format_list_numbered</span>
+                            <div>
+                                <p class="text-xs text-slate-400 uppercase tracking-wider">Posición en cola</p>
+                                <p id="turno-posicion" class="font-bold text-slate-900 dark:text-white">5</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primary Action -->
+                <button id="btn-consultar"
+                    class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-lg h-14 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all transform hover:translate-y-[-1px] active:translate-y-[1px]">
+                    <span>Consultar Estado</span>
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+
+                <!-- Refresh Button (shown after first lookup) -->
+                <button id="btn-actualizar"
+                    class="hidden w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm h-12 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-slate-50 dark:hover:bg-slate-700">
+                    <span class="material-symbols-outlined text-lg">refresh</span>
+                    <span>Actualizar estado</span>
+                    <span id="refresh-timer" class="text-xs text-slate-400 ml-2">(auto 10s)</span>
+                </button>
+            </div>
+            <!-- Footer / Privacy -->
+            <div class="bg-slate-50 dark:bg-slate-800/50 px-6 py-4 border-t border-slate-100 dark:border-slate-800">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-slate-400 text-lg mt-0.5">lock</span>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal">
+                        <strong>Privacidad garantizada.</strong> No almacenamos tus datos personales. Esta búsqueda es
+                        anónima.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Background Abstract shapes -->
+    <div aria-hidden="true" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+        <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl"></div>
+    </div>
+
+    <script type="module" src="/src/pages/turno.ts"></script>
+</body>
+
+</html>

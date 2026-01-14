@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Pantalla Sala de Espera TV</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007a33",
+                        "background-light": "#f9fafa",
+                        "background-dark": "#22252a",
+                        "neutral-dark": "#101814",
+                        "accent-gray": "#dae7df",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    fontSize: {
+                        "huge": "8rem",
+                        "big": "4rem",
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background-light text-neutral-dark font-display h-screen flex flex-col overflow-hidden">
+    <!-- Header Section -->
+    <header
+        class="flex-none bg-white border-b-4 border-primary px-8 py-4 flex items-center justify-between shadow-sm z-10">
+        <div class="flex items-center gap-6">
+            <div class="bg-primary/10 p-3 rounded-lg text-primary">
+                <span class="material-symbols-outlined text-4xl">local_hospital</span>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight text-neutral-dark uppercase">Centro de Salud Dr. Fleming
+                </h1>
+                <p class="text-gray-500 text-lg font-medium">Servicio Andaluz de Salud</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-8 bg-gray-50 px-6 py-3 rounded-xl border border-gray-100">
+            <div class="text-right">
+                <div class="text-4xl font-bold text-neutral-dark leading-none">14:35</div>
+            </div>
+            <div class="h-10 w-px bg-gray-300"></div>
+            <div class="text-left">
+                <div class="text-xl font-medium text-gray-600 uppercase tracking-wide">Lunes</div>
+                <div class="text-lg text-gray-500">14 Enero 2026</div>
+            </div>
+        </div>
+    </header>
+    <!-- Last Called History Strip -->
+    <div id="history-strip"
+        class="flex-none bg-gradient-to-r from-primary/5 to-blue-50 border-b border-gray-100 px-8 py-3">
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 text-gray-500 font-medium text-sm uppercase tracking-wider shrink-0">
+                <span class="material-symbols-outlined text-lg">history</span>
+                <span>Últimos llamados</span>
+            </div>
+            <div id="history-list" class="flex items-center gap-4 flex-1 overflow-x-auto">
+                <!-- Dynamic history items rendered by JS -->
+                <div class="text-gray-400 text-sm italic">Sin historial</div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex w-full p-6 gap-6 overflow-hidden">
+        <!-- Left Column: NOW SERVING (High Impact) -->
+        <section class="w-[55%] flex flex-col gap-6">
+            <div class="flex items-center gap-3 pb-2 border-b border-gray-200">
+                <span class="material-symbols-outlined text-primary text-4xl fill-1">notifications_active</span>
+                <h2 class="text-3xl font-bold text-neutral-dark tracking-tight">AHORA ATENDIENDO</h2>
+            </div>
+            <div id="now-serving-container" class="flex-1 flex flex-col gap-5 pr-2">
+                <!-- Primary Active Card (The most recent) -->
+                <div id="now-serving-primary"
+                    class="relative bg-white rounded-2xl border-l-[16px] border-primary shadow-lg p-8 flex flex-col justify-between group overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="material-symbols-outlined text-9xl text-primary">campaign</span>
+                    </div>
+                    <div class="flex justify-between items-start z-10">
+                        <div>
+                            <span
+                                class="bg-green-100 text-primary px-4 py-1 rounded-full text-lg font-bold uppercase tracking-wider mb-2 inline-block">Llamando</span>
+                            <div class="text-gray-500 text-2xl font-medium uppercase mt-2">Medicina General</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-gray-900 text-5xl font-bold">Puesto 05</div>
+                            <div class="text-gray-400 text-xl font-medium mt-1">Planta Baja</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center items-center py-6 z-10">
+                        <div
+                            class="text-[10rem] font-extrabold text-primary leading-none tracking-tighter tabular-nums">
+                            A-102</div>
+                    </div>
+                </div>
+                <!-- Secondary Active Cards -->
+                <div id="now-serving-secondary" class="grid grid-cols-2 gap-5 h-[35%]">
+                    <!-- Card 2 -->
+                    <div
+                        class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col justify-center relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-gray-300"></div>
+                        <div class="flex justify-between items-baseline mb-2 pl-3">
+                            <span class="text-gray-500 font-medium text-lg uppercase truncate">Enfermería</span>
+                            <span class="text-neutral-dark font-bold text-2xl">Sala 12</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-7xl font-bold text-neutral-dark tracking-tight tabular-nums">B-045</span>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div
+                        class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col justify-center relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-gray-300"></div>
+                        <div class="flex justify-between items-baseline mb-2 pl-3">
+                            <span class="text-gray-500 font-medium text-lg uppercase truncate">Med. General</span>
+                            <span class="text-neutral-dark font-bold text-2xl">Puesto 03</span>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-7xl font-bold text-neutral-dark tracking-tight tabular-nums">A-101</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Right Column: UPCOMING (List View) -->
+        <section class="w-[45%] flex flex-col gap-6 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 h-full">
+            <div class="flex items-center gap-3 pb-2 border-b border-gray-200">
+                <span class="material-symbols-outlined text-gray-400 text-4xl">list_alt</span>
+                <h2 class="text-3xl font-bold text-gray-500 tracking-tight">SIGUIENTES</h2>
+            </div>
+            <div class="flex-1 overflow-hidden flex flex-col">
+                <!-- List Header -->
+                <div
+                    class="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 rounded-lg text-gray-500 font-semibold text-lg uppercase tracking-wider mb-2">
+                    <div class="col-span-4">Turno</div>
+                    <div class="col-span-8">Área / Servicio</div>
+                </div>
+                <!-- List Items Container -->
+                <div id="next-list" class="flex flex-col gap-2 h-full">
+                    <!-- Item 1 -->
+                    <div class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-white border-b border-gray-100">
+                        <div class="col-span-4 text-4xl font-bold text-neutral-dark tabular-nums">A-103</div>
+                        <div class="col-span-8 text-2xl text-gray-600 font-medium truncate">Medicina General</div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div
+                        class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-gray-50/50 rounded-lg border-b border-gray-100">
+                        <div class="col-span-4 text-4xl font-bold text-neutral-dark tabular-nums">C-002</div>
+                        <div class="col-span-8 text-2xl text-gray-600 font-medium truncate">Administración</div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-white border-b border-gray-100">
+                        <div class="col-span-4 text-4xl font-bold text-neutral-dark tabular-nums">B-046</div>
+                        <div class="col-span-8 text-2xl text-gray-600 font-medium truncate">Enfermería</div>
+                    </div>
+                    <!-- Item 4 -->
+                    <div
+                        class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-gray-50/50 rounded-lg border-b border-gray-100">
+                        <div class="col-span-4 text-4xl font-bold text-neutral-dark tabular-nums">A-104</div>
+                        <div class="col-span-8 text-2xl text-gray-600 font-medium truncate">Medicina General</div>
+                    </div>
+                    <!-- Item 5 -->
+                    <div class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-white border-b border-gray-100">
+                        <div class="col-span-4 text-4xl font-bold text-neutral-dark tabular-nums">D-012</div>
+                        <div class="col-span-8 text-2xl text-gray-600 font-medium truncate">Rayos X</div>
+                    </div>
+                    <!-- Item 6 -->
+                    <div
+                        class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-gray-50/50 rounded-lg border-b border-gray-100">
+                        <div class="col-span-4 text-4xl font-bold text-neutral-dark tabular-nums">B-047</div>
+                        <div class="col-span-8 text-2xl text-gray-600 font-medium truncate">Enfermería</div>
+                    </div>
+                    <!-- Item 7 -->
+                    <div class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-white border-b border-gray-100">
+                        <div class="col-span-4 text-4xl font-bold text-neutral-dark tabular-nums">C-003</div>
+                        <div class="col-span-8 text-2xl text-gray-600 font-medium truncate">Administración</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer Ticker -->
+    <footer class="flex-none bg-neutral-dark text-white py-4 px-8 overflow-hidden relative shadow-inner z-20">
+        <div class="flex items-center gap-6 h-full w-full">
+            <div
+                class="flex items-center gap-2 bg-yellow-500/20 px-3 py-1 rounded text-yellow-400 font-bold uppercase tracking-widest text-sm shrink-0 border border-yellow-500/30">
+                <span class="material-symbols-outlined text-lg">info</span>
+                Aviso
+            </div>
+
+            <!-- Ticker Container -->
+            <div id="tv-ticker" aria-label="Avisos" role="status"
+                class="flex-1 overflow-hidden relative h-full flex items-center">
+                <div id="tv-ticker-viewport" class="w-full overflow-hidden">
+                    <div id="tv-ticker-track">
+                        <span class="tv-ticker-item text-2xl font-medium tracking-wide whitespace-nowrap opacity-90"
+                            id="tv-ticker-text">
+                            Por favor, mantenga preparado su DNI o Tarjeta Sanitaria antes de entrar en consulta.
+                            Recuerde que el uso de mascarilla es obligatorio en áreas designadas para pacientes con
+                            síntomas respiratorios.
+                        </span>
+                        <!-- Duplicated for seamless loop -->
+                        <span
+                            class="tv-ticker-item tv-ticker-dup text-2xl font-medium tracking-wide whitespace-nowrap opacity-90"
+                            aria-hidden="true">
+                            Por favor, mantenga preparado su DNI o Tarjeta Sanitaria antes de entrar en consulta.
+                            Recuerde que el uso de mascarilla es obligatorio en áreas designadas para pacientes con
+                            síntomas respiratorios.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Callout Overlay -->
+    <div id="callout-overlay"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 scale-95">
+        <div
+            class="bg-white rounded-3xl p-12 max-w-4xl w-full mx-8 shadow-2xl transform transition-transform duration-300 scale-90 border-4 border-l-8 border-primary relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute top-0 right-0 p-8 opacity-5">
+                <span class="material-symbols-outlined text-[15rem] text-primary">campaign</span>
+            </div>
+
+            <div class="relative z-10 text-center flex flex-col items-center gap-6">
+                <div id="callout-status"
+                    class="bg-primary text-white text-3xl font-black px-8 py-3 rounded-full uppercase tracking-widest shadow-lg">
+                    LLAMADO
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <span class="text-4xl text-gray-500 font-medium uppercase tracking-wide">Turno</span>
+                    <div id="callout-ticket"
+                        class="text-[12rem] leading-none font-black text-neutral-dark tracking-tighter tabular-nums">
+                        A-001
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-gray-200 my-4"></div>
+
+                <div class="flex flex-col gap-2">
+                    <div id="callout-service" class="text-4xl font-bold text-gray-600 uppercase">
+                        Admisión
+                    </div>
+                    <div id="callout-counter" class="text-6xl font-black text-primary uppercase">
+                        Mesa 1
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Ticker Styles */
+        #tv-ticker-viewport {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #tv-ticker-track {
+            display: inline-flex;
+            gap: 3rem;
+            /* Gap between original and duplicate */
+            white-space: nowrap;
+            will-change: transform;
+            animation: marquee 25s linear infinite;
+        }
+
+        #tv-ticker-track.paused {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #tv-ticker-track {
+                animation: none;
+                transform: none;
+            }
+        }
+
+        #callout-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        #callout-overlay.show>div {
+            transform: scale(1);
+        }
+
+        /* Animation classes */
+        .slide-up-enter {
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Status specific styles */
+        #callout-overlay.serving .border-primary {
+            border-color: #3b82f6;
+        }
+
+        #callout-overlay.serving #callout-status {
+            background-color: #2563eb;
+        }
+
+        #callout-overlay.serving .text-primary {
+            color: #3b82f6;
+        }
+
+        /* TV Controls & Animations */
+        .tv-pulse {
+            animation: tvPulse 0.4s ease-out;
+        }
+
+        @keyframes tvPulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.9;
+            }
+
+            50% {
+                transform: scale(1.02);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        #tv-controls {
+            transition: opacity 0.5s ease;
+        }
+
+        #tv-controls.hidden-controls {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .control-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #4b5563;
+            border-radius: 9999px;
+            padding: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background-color: #fff;
+            transform: scale(1.1);
+            color: #101818;
+        }
+
+        .control-btn.active {
+            background-color: #007a33;
+            color: white;
+        }
+    </style>
+
+    <!-- Floating Controls -->
+    <div id="tv-controls" class="fixed top-4 right-8 z-50 flex gap-3">
+        <button id="tv-sound-toggle" class="control-btn" title="Activar sonido">
+            <span class="material-symbols-outlined text-xl">volume_off</span>
+        </button>
+        <button id="tv-auto-toggle" class="control-btn" title="Modo Auto-Demo">
+            <span class="material-symbols-outlined text-xl">autoplay</span>
+        </button>
+        <button id="tv-fullscreen-btn" class="control-btn" title="Pantalla completa">
+            <span class="material-symbols-outlined text-xl">fullscreen</span>
+        </button>
+    </div>
+    <script type="module" src="/src/pages/pantalla.ts"></script>
+</body>
+
+</html>

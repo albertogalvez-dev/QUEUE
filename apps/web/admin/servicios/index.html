@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Configuración de Servicios - QUEUE!</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f7a5c",
+                        "primary-hover": "#165c45",
+                        "background-light": "#fafafa",
+                        "background-dark": "#1c1f22",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2a2e33",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#3f444a",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar for a cleaner enterprise look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Toggle Switch CSS */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #007c8a;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #007c8a;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 overflow-hidden h-screen flex">
+    <!-- Green Sidebar (unified) -->
+    <aside
+        class="w-20 lg:w-64 bg-primary flex flex-col justify-between h-full shadow-xl z-20 transition-all duration-300 flex-shrink-0">
+        <div class="flex flex-col">
+            <!-- Logo -->
+            <div class="h-20 flex items-center px-6 border-b border-white/10">
+                <div class="bg-white/90 p-1.5 rounded-lg mr-3 shadow-sm">
+                    <span class="material-symbols-outlined text-primary text-2xl">local_hospital</span>
+                </div>
+                <div class="hidden lg:flex flex-col">
+                    <span class="text-white font-bold text-lg leading-tight tracking-tight">QUEUE!</span>
+                    <span class="text-white/70 text-xs font-medium">Servicio de Salud</span>
+                </div>
+            </div>
+            <!-- Navigation -->
+            <nav class="flex flex-col gap-1 p-3 mt-4">
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="dashboard">
+                    <span class="material-symbols-outlined text-[24px]">dashboard</span>
+                    <span class="hidden lg:block text-sm font-medium">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="colas">
+                    <span class="material-symbols-outlined text-[24px]">queue_music</span>
+                    <span class="hidden lg:block text-sm font-medium">Gestión de Colas</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-colors group"
+                    href="#" data-nav="estadisticas">
+                    <span class="material-symbols-outlined text-[24px]">bar_chart</span>
+                    <span class="hidden lg:block text-sm font-medium">Estadísticas</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-white sidebar-active group" href="#"
+                    data-nav="config">
+                    <span class="material-symbols-outlined text-[24px] fill-1">settings</span>
+                    <span class="hidden lg:block text-sm font-bold">Configuración</span>
+                </a>
+            </nav>
+        </div>
+        <!-- User Profile -->
+        <div class="p-4 border-t border-white/10">
+            <div
+                class="flex items-center gap-3 bg-primary-dark/30 p-2 rounded-xl border border-white/5 hover:bg-primary-dark/50 cursor-pointer transition-colors">
+                <div
+                    class="size-10 rounded-full bg-primary/20 text-white flex items-center justify-center font-bold text-sm">
+                    DR</div>
+                <div class="hidden lg:flex flex-col overflow-hidden">
+                    <span class="text-white text-sm font-bold truncate">Dr. A. Martínez</span>
+                    <span class="text-white/60 text-xs truncate">Administrador Jefe</span>
+                </div>
+                <span class="material-symbols-outlined text-white/50 ml-auto text-lg hidden lg:block">expand_more</span>
+            </div>
+        </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-background-light dark:bg-background-dark">
+        <!-- Header -->
+        <header class="px-8 py-6 pb-2">
+            <!-- Breadcrumbs -->
+            <nav aria-label="Breadcrumb" class="flex mb-4">
+                <ol class="flex items-center space-x-2">
+                    <li>
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors"
+                            href="#">Inicio</a>
+                    </li>
+                    <li>
+                        <span class="text-slate-300 dark:text-slate-600 text-sm">/</span>
+                    </li>
+                    <li>
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors"
+                            href="#">Admin</a>
+                    </li>
+                    <li>
+                        <span class="text-slate-300 dark:text-slate-600 text-sm">/</span>
+                    </li>
+                    <li>
+                        <span aria-current="page" class="text-primary font-semibold text-sm">Servicios</span>
+                    </li>
+                </ol>
+            </nav>
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div class="flex flex-col gap-1">
+                    <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Administración de
+                        Servicios</h1>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm max-w-2xl">Gestione las colas de espera,
+                        prefijos de tickets y tiempos estimados de atención.</p>
+                </div>
+                <button
+                    class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 font-medium text-sm group shrink-0">
+                    <span
+                        class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">add</span>
+                    Añadir nuevo servicio
+                </button>
+            </div>
+        </header>
+        <!-- Content Container -->
+        <div class="flex-1 px-8 py-6">
+            <!-- Filters Toolbar -->
+            <div
+                class="flex flex-wrap items-center justify-between gap-4 mb-6 bg-surface-light dark:bg-surface-dark p-2 rounded-xl border border-border-light dark:border-border-dark shadow-sm">
+                <div class="flex flex-1 items-center max-w-md relative">
+                    <div
+                        class="absolute left-3 text-slate-400 dark:text-slate-500 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </div>
+                    <input
+                        class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-transparent focus:bg-white dark:focus:bg-surface-dark border focus:border-primary/50 focus:ring-0 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-500 transition-all"
+                        placeholder="Buscar servicio por nombre, código..." type="text" />
+                </div>
+                <div class="flex items-center gap-2 border-l border-border-light dark:border-border-dark pl-4">
+                    <button
+                        class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filtros
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">download</span>
+                        Exportar
+                    </button>
+                </div>
+            </div>
+            <!-- Table Container -->
+            <div
+                class="bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-xl overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="bg-slate-50/50 dark:bg-slate-800/30 border-b border-border-light dark:border-border-dark">
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 w-1/3">
+                                    Nombre del Servicio</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-center w-24">
+                                    Prefijo</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Duración Media</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Personal Asignado</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Estado</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">
+                                    Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="services-tbody" class="divide-y divide-border-light dark:divide-border-dark">
+                            <!-- Dynamic rows rendered by admin-servicios.ts -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div
+                    class="px-6 py-4 border-t border-border-light dark:border-border-dark bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between">
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        Mostrando <span class="font-medium text-slate-900 dark:text-white">1</span> a <span
+                            class="font-medium text-slate-900 dark:text-white">4</span> de <span
+                            class="font-medium text-slate-900 dark:text-white">12</span> servicios
+                    </p>
+                    <div class="flex items-center gap-2">
+                        <button
+                            class="p-1 rounded-md text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50 transition-colors"
+                            disabled="">
+                            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                        </button>
+                        <div class="flex items-center gap-1">
+                            <button
+                                class="px-3 py-1 text-xs font-medium rounded-md bg-white dark:bg-slate-700 text-primary border border-primary/20 shadow-sm">1</button>
+                            <button
+                                class="px-3 py-1 text-xs font-medium rounded-md text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">2</button>
+                            <button
+                                class="px-3 py-1 text-xs font-medium rounded-md text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">3</button>
+                        </div>
+                        <button
+                            class="p-1 rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Note -->
+            <div class="mt-6 flex justify-center">
+                <p class="text-xs text-slate-400 dark:text-slate-600 text-center max-w-lg">
+                    <span class="material-symbols-outlined align-middle text-[14px] mr-1">info</span>
+                    Los cambios de estado se reflejan inmediatamente en los dispensadores de tickets del vestíbulo.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/src/pages/admin-servicios.ts"></script>
+</body>
+
+</html>

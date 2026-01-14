@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kiosco Ticket e Impresión</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#28af60",
+                        "background-light": "#f9fafa",
+                        "background-dark": "#22252a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d3138",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 10px 40px -5px rgba(0, 0, 0, 0.08)',
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#121714] dark:text-gray-100 font-display min-h-screen flex flex-col overflow-hidden selection:bg-primary selection:text-white">
+<!-- Top Status Bar (Institutional Context) -->
+<header class="w-full px-8 py-6 flex justify-between items-center border-b border-gray-200 dark:border-gray-800 bg-surface-light dark:bg-surface-dark relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold tracking-wide uppercase text-primary">ClinicQueue</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Sistema de Salud</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">wifi</span>
+<span class="text-sm font-medium">Conectado</span>
+</div>
+</header>
+<!-- Main Layout Container -->
+<main class="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-7xl mx-auto h-full relative">
+<!-- Success Message -->
+<div class="text-center mb-10 space-y-2">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 ring-4 ring-primary/5">
+<span class="material-symbols-outlined text-4xl">check_circle</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-black tracking-tight text-[#121714] dark:text-white">
+                ¡Listo! Turno registrado
+            </h1>
+<p class="text-lg text-gray-500 dark:text-gray-400 font-medium">
+                Su solicitud ha sido procesada correctamente
+            </p>
+</div>
+<!-- The Ticket & Printer Zone -->
+<div class="w-full max-w-4xl flex flex-col md:flex-row gap-8 items-stretch justify-center relative">
+<!-- Printer Status Panel (Left Side on Desktop) -->
+<div class="flex-1 flex flex-col justify-center space-y-6 md:pr-8 md:border-r border-dashed border-gray-300 dark:border-gray-700">
+<!-- Status -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-6 shadow-soft border border-gray-100 dark:border-gray-700">
+<div class="flex items-start gap-4 mb-4">
+<div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-2xl">print</span>
+</div>
+<div>
+<p class="font-bold text-lg leading-tight">Imprimiendo ticket...</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Por favor, retire el papel de la bandeja inferior.</p>
+</div>
+</div>
+<!-- Progress Bar Component Reuse -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Progreso</span>
+<span class="text-xs font-bold text-primary">85%</span>
+</div>
+<div class="h-3 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full relative w-[85%]">
+<div class="absolute inset-0 bg-white/20 w-full h-full" style="background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent); background-size: 1rem 1rem;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Instruction -->
+<div class="bg-primary/5 border border-primary/10 rounded-xl p-4 flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl">tv</span>
+<p class="text-sm text-[#121714] dark:text-gray-200 leading-snug font-medium">
+                        Espere a ser llamado por su código en las pantallas de la sala de espera.
+                    </p>
+</div>
+</div>
+<!-- The Ticket (Hero Element) -->
+<div class="flex-1 min-w-[340px] relative group perspective-1000">
+<!-- Shadow/Paper Layer -->
+<div class="absolute inset-0 bg-gray-900/5 translate-y-4 rounded-lg blur-xl w-[90%] mx-auto"></div>
+<div class="relative bg-white text-[#121714] rounded-lg overflow-hidden shadow-card border-t-8 border-primary flex flex-col">
+<!-- Ticket Punch Holes (Visual Decoration) -->
+<div class="absolute top-[65%] -left-3 w-6 h-6 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="absolute top-[65%] -right-3 w-6 h-6 rounded-full bg-background-light dark:bg-background-dark"></div>
+<!-- Ticket Header -->
+<div class="px-8 pt-8 pb-4 border-b border-gray-100 flex justify-between items-start">
+<div>
+<p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">TURNO DE ATENCIÓN</p>
+<p class="text-sm font-medium text-gray-500">Servicio Andaluz de Salud</p>
+</div>
+<div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-gray-400">
+<span class="material-symbols-outlined">qr_code_2</span>
+</div>
+</div>
+<!-- Ticket Body -->
+<div class="px-8 py-8 flex flex-col items-center justify-center text-center bg-white relative">
+<!-- Background Pattern for Texture -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
+<h2 class="text-[5rem] leading-none font-black text-[#121714] tracking-tighter mb-2">A-023</h2>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                            En cola
+                        </div>
+</div>
+<!-- Dashed Divider -->
+<div class="w-full h-px border-t-2 border-dashed border-gray-200 relative"></div>
+<!-- Ticket Footer Details -->
+<div class="p-8 bg-gray-50 flex justify-between items-end">
+<div class="flex flex-col gap-1">
+<span class="text-xs font-semibold text-gray-400 uppercase">Área</span>
+<span class="text-xl font-bold text-gray-800">Admisión</span>
+</div>
+<div class="flex flex-col gap-1 text-right">
+<span class="text-xs font-semibold text-gray-400 uppercase">Hora</span>
+<span class="text-xl font-bold text-gray-800">10:15</span>
+</div>
+</div>
+</div>
+<!-- Ticket Bottom "Paper Tear" Effect (Simulated with SVG or simple CSS) -->
+<!-- Since no complex css, we just use rounded bottom which looks clean -->
+</div>
+</div>
+<!-- Action Area -->
+<div class="w-full max-w-4xl mt-12 flex justify-center">
+<button class="w-full md:w-auto md:min-w-[300px] h-16 bg-primary hover:bg-[#239a54] active:scale-[0.98] transition-all duration-200 rounded-full text-white text-xl font-bold shadow-lg shadow-primary/30 flex items-center justify-center gap-3 group">
+<span>Finalizar</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- Footer Branding -->
+<footer class="py-6 text-center text-gray-400 dark:text-gray-600 text-sm">
+<p>© 2024 ClinicQueue System. v2.4.1</p>
+</footer>
+</body></html>

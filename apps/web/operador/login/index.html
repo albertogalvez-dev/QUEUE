@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Acceso Personal Sanitario - QUEUE!</title>
+    <!-- Google Fonts: Public Sans -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2d8054",
+                        "primary-hover": "#246643",
+                        "background-light": "#f9fafa",
+                        "background-dark": "#21262c",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2b323b",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#374151",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        "soft": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+                        "card": "0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)",
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom Styles for Focus Rings and Transitions */
+        .focus-ring {
+            @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200;
+        }
+
+        /* Subtle background pattern for the institutional look */
+        .bg-pattern {
+            background-color: #f9fafa;
+            background-image: radial-gradient(#2d8054 0.5px, transparent 0.5px), radial-gradient(#2d8054 0.5px, #f9fafa 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.4;
+        }
+
+        .dark .bg-pattern {
+            background-color: #21262c;
+            background-image: radial-gradient(#2d8054 0.5px, transparent 0.5px), radial-gradient(#2d8054 0.5px, #21262c 0.5px);
+            opacity: 0.2;
+        }
+
+        /* Smooth transition for theme switching */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display antialiased min-h-screen flex flex-col">
+    <!-- Header / Branding Bar -->
+    <header
+        class="w-full bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-primary/10 dark:bg-primary/20 p-2 rounded-lg text-primary">
+                    <span class="material-symbols-outlined text-[24px]">medical_services</span>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-lg font-bold text-gray-900 dark:text-white leading-tight tracking-tight">QUEUE!</h1>
+                    <span class="text-xs text-primary font-medium tracking-wide uppercase">Servicio Andaluz de
+                        Salud</span>
+                </div>
+            </div>
+            <div class="hidden sm:flex items-center gap-6">
+                <a class="text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary-300 transition-colors flex items-center gap-1"
+                    href="#">
+                    <span class="material-symbols-outlined text-[18px]">help</span>
+                    Ayuda
+                </a>
+                <div class="h-4 w-px bg-gray-300 dark:bg-gray-600"></div>
+                <div class="text-xs text-gray-400 dark:text-gray-500 font-mono">v2.4.1-RC</div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Area with Background Pattern -->
+    <main class="flex-grow flex items-center justify-center relative p-4 sm:p-6 lg:p-8">
+        <!-- Abstract Background Decoration -->
+        <div class="absolute inset-0 bg-pattern z-0 pointer-events-none"></div>
+        <!-- Login Card -->
+        <div
+            class="relative z-10 w-full max-w-[440px] bg-surface-light dark:bg-surface-dark rounded-xl shadow-card border border-border-light dark:border-border-dark overflow-hidden flex flex-col">
+            <!-- Card Top Decorative Strip -->
+            <div class="h-1.5 w-full bg-primary"></div>
+            <div class="p-8 sm:p-10 flex flex-col gap-6">
+                <!-- Heading Section -->
+                <div class="flex flex-col gap-2 text-center sm:text-left">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Acceso Personal
+                        Sanitario</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Introduce tus credenciales institucionales para
+                        gestionar el sistema de turnos.</p>
+                </div>
+                <!-- Role Selector (Segmented Control) -->
+                <div class="bg-gray-100 dark:bg-gray-800 p-1.5 rounded-lg flex relative">
+                    <label class="flex-1 cursor-pointer relative z-10">
+                        <input checked="" class="peer sr-only" name="role" type="radio" value="operador" />
+                        <div
+                            class="w-full h-9 flex items-center justify-center gap-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 transition-all duration-200 peer-checked:bg-white dark:peer-checked:bg-gray-700 peer-checked:text-primary dark:peer-checked:text-white peer-checked:shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">support_agent</span>
+                            Operador
+                        </div>
+                    </label>
+                    <label class="flex-1 cursor-pointer relative z-10">
+                        <input class="peer sr-only" name="role" type="radio" value="admin" />
+                        <div
+                            class="w-full h-9 flex items-center justify-center gap-2 rounded-md text-sm font-medium text-gray-500 dark:text-gray-400 transition-all duration-200 peer-checked:bg-white dark:peer-checked:bg-gray-700 peer-checked:text-primary dark:peer-checked:text-white peer-checked:shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                            Administración
+                        </div>
+                    </label>
+                </div>
+                <!-- Login Form -->
+                <form action="#" class="flex flex-col gap-5" method="POST">
+                    <!-- Email Field -->
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="email">Correo
+                            Electrónico @salud.gov</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span
+                                    class="material-symbols-outlined text-gray-400 group-focus-within:text-primary text-[20px]">mail</span>
+                            </div>
+                            <input
+                                class="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus-ring sm:text-sm"
+                                id="email" name="email" placeholder="usuario@salud.gov" type="email" />
+                        </div>
+                    </div>
+                    <!-- Password Field -->
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                for="password">Contraseña</label>
+                        </div>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span
+                                    class="material-symbols-outlined text-gray-400 group-focus-within:text-primary text-[20px]">lock</span>
+                            </div>
+                            <input
+                                class="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus-ring sm:text-sm"
+                                id="password" name="password" placeholder="••••••••••" type="password" />
+                        </div>
+                    </div>
+                    <!-- Actions -->
+                    <div class="pt-2 flex flex-col gap-4">
+                        <button
+                            class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                            type="button">
+                            Entrar como Operador (Demo)
+                            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </button>
+                        <div class="flex items-center justify-between text-sm">
+                            <a class="font-medium text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary-300 transition-colors"
+                                href="#">¿Olvidaste tu contraseña?</a>
+                            <a class="font-medium text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary-300 transition-colors"
+                                href="#">Problemas de acceso</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Card Footer / Disclaimer -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 px-8 py-4 border-t border-gray-100 dark:border-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-gray-400 text-[18px] mt-0.5">info</span>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                        Sistema autorizado únicamente para personal sanitario. El acceso no autorizado está monitorizado
+                        y puede conllevar sanciones legales.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Floating Decorative Element (Abstract Healthcare Graphic) -->
+        <div class="hidden xl:block absolute right-20 bottom-20 opacity-10 dark:opacity-5">
+            <!-- Abstract graphic representing connectivity or structure -->
+            <svg fill="none" height="300" viewbox="0 0 100 100" width="300" xmlns="http://www.w3.org/2000/svg">
+                <path class="text-primary"
+                    d="M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 90C27.9 90 10 72.1 10 50S27.9 10 50 10s40 17.9 40 40-17.9 40-40 40z"
+                    fill="currentColor"></path>
+                <path class="text-primary" d="M50 20v60M20 50h60" stroke="currentColor" stroke-linecap="round"
+                    stroke-width="8"></path>
+            </svg>
+        </div>
+    </main>
+    <!-- Simple Page Footer -->
+    <footer class="w-full py-6 text-center text-xs text-gray-400 dark:text-gray-600">
+        <p>QUEUE!</p>
+    </footer>
+
+    <script type="module" src="/src/pages/operador-login.ts"></script>
+</body>
+
+</html>
